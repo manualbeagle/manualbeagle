@@ -77,7 +77,7 @@ jobs:
             /tmp/check/bin/manualbeagle adapters list > /dev/null
             echo "✓ $pkg"
           done
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist/
