@@ -1,0 +1,18 @@
+# Chamberlain (US). See adapters/py/chamberlain.py for how it searches.
+brand: Chamberlain
+aliases: [Chamberlain Group, myQ Chamberlain]
+domains: [chamberlain.com, chamberlaingroup.com, cgi.widen.net]
+status: works
+categories: [garage door openers, gate operators, myQ accessories]
+python: chamberlain:Chamberlain
+manual_page: https://www.chamberlain.com/search?q={model_q}
+notes: >-
+  The site's own Coveo search, limited to documents (owner's manuals, installation manuals, user's guides as PDFs).
+  Discontinued products are left out by Chamberlain's search and fall back to web search.
+tests:
+  - model: B980
+    note: smart belt-drive opener with battery backup
+    expect: {kind: owners_manual, url_contains: cgi.widen.net, title_contains: B980 Owner's Manual, text_contains: B980}
+  - model: B970
+    note: smart belt-drive opener (older; its English owner's manual isn't listed)
+    expect: {min_results: 1, title_contains: B970}

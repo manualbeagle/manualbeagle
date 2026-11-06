@@ -1,0 +1,18 @@
+# Epson (US). See adapters/py/epson.py for how it searches.
+brand: Epson
+aliases: [EPSON, Epson America, Seiko Epson]
+domains: [epson.com, files.support.epson.com]
+status: works
+categories: [printers, scanners, projectors]
+python: epson:Epson
+manual_page: https://epson.com/search/?text={model_q}
+notes: >-
+  epson.com's search finds the product's support page, whose manuals panel links PDFs on files.support.epson.com.
+tests:
+  - model: XP-6000
+    note: inkjet all-in-one
+    expect: {kind: owners_manual, url_contains: files.support.epson.com, title_contains: User's Guide}
+  - model: ET-2800
+    expect: {kind: owners_manual}
+  - model: WF-2850
+    expect: {min_results: 1}

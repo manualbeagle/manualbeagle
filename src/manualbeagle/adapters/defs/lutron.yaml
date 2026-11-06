@@ -1,0 +1,22 @@
+# Lutron (Caseta, RA2, RadioRA 3, Maestro).
+# Site: support.lutron.com/us/en/product/<family>/<model>/documents lists each model's documents, but the site
+# answers automated requests with an Imperva bot wall ("Pardon Our Interruption", 2026-11-03), which we don't get
+# around. Web search finds the documents pages and copies of the instructions; the maker's support pages are
+# offered as links for a person to open.
+# Last verified: 2026-11-03.
+brand: Lutron
+aliases: [Lutron Electronics, Lutron Electronics Co., Inc, Caseta, Caséta]
+domains: [lutron.com, support.lutron.com, assets.lutron.com]
+status: blocked
+categories: [dimmers, switches, remotes, shades, lighting bridges]
+manual_page: https://support.lutron.com/us/en/search?q={model_q}
+notes: >-
+  support.lutron.com sits behind an Imperva bot wall (2026-11-03). Falls back to web search, which finds the
+  maker's documents pages (to open) and retailer copies of the instructions.
+tests:
+  - model: PD-6WCL
+    note: Caseta smart dimmer
+    skip: site behind bot protection (Imperva, 2026-11-03)
+  - model: L-BDG2-WH
+    note: Smart Bridge 2
+    skip: site behind bot protection (Imperva, 2026-11-03)

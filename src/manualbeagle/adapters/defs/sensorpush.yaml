@@ -1,0 +1,31 @@
+# SensorPush (wireless temperature and humidity sensors, gateways).
+# Site: www.sensorpush.com/manuals lists every product's manual as a PDF under /s/, named by model code
+# (htpxw-htw-manual.pdf covers the HTP.xw and HT.w; ht1-manual.pdf the HT1).
+# Known gaps: a manual is matched by the model code in its file name, so a model whose file is named otherwise isn't
+# found; translated gateway manuals are listed too and are left out.
+# Last verified: 2026-11-03.
+brand: SensorPush
+aliases: [Sensor Push, Cousins & Sears]
+domains: [sensorpush.com]
+status: works
+family_manuals: true  # the manuals name no model; the file name (htpxw-htw-manual.pdf) does
+categories: [temperature sensors, humidity sensors, gateways]
+manual_page: https://www.sensorpush.com/manuals
+notes: >-
+  The manuals page's PDFs, matched by the model code in the file name (HT.w → htw).
+search:
+  - url: https://www.sensorpush.com/manuals
+    format: regex
+    results: 'href="(?P<url>/s/[^"]+?\.pdf)"'
+    fields: {url: url, title: '=SensorPush manual', kind: '=manual'}
+    keep_url: '(^|[/_-]){model_compact}([_-]|$)'
+    drop_url: '(French|German|Italian|Spanish)'
+kinds:
+  manual: owners_manual
+tests:
+  - model: HT.w
+    note: water-resistant temperature and humidity sensor
+    expect: {kind: owners_manual, url_contains: htw-manual}
+  - model: HT1
+    note: original temperature and humidity sensor
+    expect: {kind: owners_manual, url_contains: ht1-manual}

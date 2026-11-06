@@ -1,0 +1,25 @@
+# Reolink. See adapters/py/reolink.py for how it searches.
+brand: Reolink
+aliases: [Reolink Innovation]
+domains: [reolink.com, support.reolink.com, home-cdn.reolink.us]
+status: partial
+family_manuals: true  # one manual per family (Wireless Camera, PoE Camera) that names no model
+categories: [security cameras, video doorbells, NVRs, floodlight cameras]
+python: reolink:Reolink
+manual_page: https://support.reolink.com/
+notes: >-
+  The site's product search, then the product's support page's User Manual (a family manual, such as the
+  Wireless Camera User Manual). Products without a support page, such as the RLC-810A, fall back to web search.
+tests:
+  - model: D340W
+    note: Wi-Fi video doorbell
+    expect: {kind: owners_manual, url_contains: reolink.com/wp-content/assets, title_contains: D340W}
+  - model: E1 Outdoor Pro
+    note: Wi-Fi pan-tilt camera
+    expect: {kind: owners_manual, title_contains: E1 Outdoor Pro}
+  - model: TrackFlex Floodlight
+    note: floodlight camera (Reolink's key is trackflex-floodlight-wifi)
+    expect: {kind: owners_manual, title_contains: TrackFlex}
+  - model: RLC-810A
+    note: PoE bullet camera
+    skip: support.reolink.com has no page for the RLC-810A (Not Found, checked 2026-11-03); web search covers it

@@ -1,0 +1,42 @@
+# DeWalt (US).
+# Site: www.dewalt.com. /product/<model> redirects to the product's page, which links its instruction manual on
+# assets.dewalt.com/GLOBALBOM/<region>/<MODEL>/<rev>/Instruction_Manual/<LANG>/<file>.pdf.
+# Known gaps: batteries, chargers and accessories often have no manual on their page; a model DeWalt no longer
+#   lists redirects to the home page (no results, so the web search runs). The DCS355 multi-tool is one
+#   (checked 2026-11-03): its manual, N381835, is found by the web search, at a retailer.
+# Last verified: 2026-11-03.
+brand: DeWalt
+aliases: [DEWALT, De Walt]
+domains: [dewalt.com]
+status: works
+categories: [power tools, outdoor power equipment, lasers]
+manual_page: https://www.dewalt.com/search?search_api_fulltext={model_q}
+notes: >-
+  Reads the instruction-manual link on the product page. Batteries and accessories often have none.
+model:
+  # DCS380P1 (kit) and DCS380B (bare tool) share DCS380's manual, but each has its own page, so no stripping.
+  strip_suffix: []
+search:
+  - url: https://www.dewalt.com/product/{model_lower}
+    format: regex
+    results: '(?P<url>https://assets\.dewalt\.com/GLOBALBOM/[A-Z0-9]+/(?P<model>[A-Z0-9-]+)/\d+/(?P<kind>[A-Za-z_]+)/(?P<lang>[A-Z]{2})/(?P<file>[^/"''\s\\]+?\.pdf))'
+    fields: {url: url, title: '=DeWalt {model} {kind} ({file})', kind: kind, language: lang, models: model}
+kinds:
+  Instruction_Manual: owners_manual
+  Exploded_Diagram: parts_list
+  Quick_Start: quick_start
+tests:
+  - model: DCS380P1
+    note: 20V reciprocating saw kit
+    expect: {kind: owners_manual, url_contains: N236140, text_contains: DCS380}
+  - model: DWE575SB
+    note: 7-1/4 in. circular saw
+    expect: {kind: owners_manual}
+  - model: DCS391B
+    expect: {kind: owners_manual}
+  - model: DCB609-2
+    note: FLEXVOLT battery 2-pack; its page has no manual
+    skip: no manual on DeWalt's page for batteries (checked 2026-11-03)
+  - model: DCS355
+    note: 20V MAX oscillating multi-tool, discontinued
+    skip: dewalt.com/product/dcs355 redirects to the home page, so the web search finds it (checked 2026-11-03)

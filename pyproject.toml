@@ -1,0 +1,100 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "manualbeagle"
+dynamic = ["version"]  # from src/manualbeagle/__init__.py, so the version is written in one place
+description = "Finds appliance manuals by brand and model, makes them searchable per page, and files them in Homebox and other inventories."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Steven Storie" }]
+maintainers = [{ name = "Steven Storie" }]
+requires-python = ">=3.12"
+keywords = [
+    "manuals",
+    "appliances",
+    "owner's manual",
+    "homebox",
+    "home inventory",
+    "pdf",
+    "full-text search",
+    "mcp",
+    "self-hosted",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Home Automation",
+    "Topic :: Text Processing :: Indexing",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "httpx>=0.27",
+    "selectolax>=0.3.21",
+    "jsonpath-ng>=1.6",
+    "pydantic>=2.6",
+    "pyyaml>=6.0",
+    "pypdfium2>=4.30",
+    "websockets>=13",  # Home Assistant's WebSocket API (its device registry has no REST endpoint)
+]
+
+[project.optional-dependencies]
+mcp = ["mcp>=2"]
+web = ["starlette>=0.40", "uvicorn>=0.30", "pillow>=10"]  # pillow: greys plate photos before OCR
+dev = ["pytest>=8", "ruff>=0.6", "respx>=0.21", "mcp>=2", "starlette>=0.40", "uvicorn>=0.30", "pillow>=10"]
+
+[project.scripts]
+manualbeagle = "manualbeagle.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/manualbeagle/manualbeagle"
+Documentation = "https://github.com/manualbeagle/manualbeagle/tree/main/docs"
+Repository = "https://github.com/manualbeagle/manualbeagle"
+Issues = "https://github.com/manualbeagle/manualbeagle/issues"
+Changelog = "https://github.com/manualbeagle/manualbeagle/blob/main/CHANGELOG.md"
+Brands = "https://github.com/manualbeagle/manualbeagle/blob/main/docs/brands.md"
+Funding = "https://buymeacoffee.com/stevenstorie"
+
+[tool.hatch.version]
+path = "src/manualbeagle/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/manualbeagle"]
+
+[tool.hatch.build.targets.sdist]
+# git-ignored files (CLAUDE.local.md, .env, a library) never go in; these are tracked but not for the sdist.
+exclude = ["/.claude", "/CLAUDE.local.md", "/scripts"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "live: talks to real maker sites or a real model; run with -m live (skipped by default)",
+]
+addopts = "-m 'not live'"
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "D"]
+ignore = ["E501", "D105", "D107"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D"]

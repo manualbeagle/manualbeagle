@@ -1,0 +1,22 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://apis.reolink.com/v2/official-site-data-cache/common/navigate/search-bar/product/list?country=US&keyword=D340W&lang=en&limit=8",
+   "status": 200,
+   "url": "https://apis.reolink.com/v2/official-site-data-cache/common/navigate/search-bar/product/list?lang=en&country=US&keyword=D340W&limit=8",
+   "headers": {
+    "content-type": "application/json"
+   },
+   "text": "{\"items\": [{\"name\": \"D340W\", \"key\": \"d340w\"}]}"
+  },
+  {
+   "key": "GET https://support.reolink.com/c/d340w/",
+   "status": 200,
+   "url": "https://support.reolink.com/c/d340w/",
+   "headers": {
+    "content-type": "text/html; charset=utf-8"
+   },
+   "text": "\"title\":\"User Manual\",\"downloadUrl\":\"https://reolink.com/wp-content/assets/multiple-languages/manual/Reolink_Wireless_Camera_User_Manual.pdf?download_name=Reolink_Wireless_Camera_User_Manual.pdf\""
+  }
+ ]
+}

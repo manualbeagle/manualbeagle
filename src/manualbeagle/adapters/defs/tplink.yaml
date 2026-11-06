@@ -1,0 +1,38 @@
+# TP-Link and Kasa Smart (US).
+# Site: www.tp-link.com. /us/support/download/<model>/ is the model's support page; its documents are links with
+# data-vars-event-category="Download-<Type>_<MODEL>" (UserGuide, QuickInstallationGuide, Datasheet,
+# ApplicationGuide...) pointing at /us/document/<id>/, which redirects to the PDF on static.tp-link.com.
+# Known gaps: the page shows the newest hardware version (V1, V2...) only; multi-packs (EP25P4, KP125P2) are found
+#   through the single model's page; some small products (EP25) carry only a datasheet; Tapo and Deco products have
+#   their own sites and aren't covered here beyond what tp-link.com/us lists.
+# Last verified: 2026-11-03.
+brand: TP-Link
+aliases: [TPLink, TP Link, Kasa, Kasa Smart, TP-Link Kasa]
+domains: [tp-link.com, static.tp-link.com, kasasmart.com]
+status: works
+categories: [smart plugs, power strips, switches, routers, Wi-Fi extenders, cameras]
+manual_page: https://www.tp-link.com/us/support/download/{model_lower}/
+model:
+  # Multi-packs: EP25P4 is four EP25 plugs, KP125P2 two KP125.
+  strip_suffix: ['P\d+$']
+search:
+  - url: https://www.tp-link.com/us/support/download/{model_lower}/
+    format: regex
+    results: 'data-vars-event-category="Download-(?P<kind>[A-Za-z]+)_(?P<model>[^"]+)"\s+href="(?P<url>/us/document/\d+/)">(?P<title>[^<]+)<'
+    fields: {url: url, title: '=TP-Link {title}', kind: kind, models: model}
+kinds:
+  UserGuide: owners_manual
+  QuickInstallationGuide: quick_start
+  Datasheet: spec_sheet
+  ApplicationGuide: owners_manual
+  InstallationGuide: install_guide
+tests:
+  - model: EP25P4
+    note: EP25 smart plug, 4-pack; its page lists only a datasheet and a HomeKit card
+    expect: {kind: spec_sheet, title_contains: EP25}
+  - model: HS300
+    note: Kasa smart power strip
+    expect: {kind: owners_manual, title_contains: HS300, text_contains: HS300}
+  - model: KP125M
+    note: Kasa Matter smart plug
+    expect: {kind: owners_manual, title_contains: KP125M}

@@ -1,0 +1,21 @@
+# WEN (power tools, generators, air filtration). See adapters/py/shopify.py for how it searches.
+# Site: wenproducts.com, a Shopify store; each product's description links its manual on cdn.shopify.com.
+# Last verified: 2026-11-03.
+brand: WEN
+aliases: [WEN Products, Great Lakes Technologies]
+domains: [wenproducts.com, cdn.shopify.com]
+status: works
+categories: [power tools, generators, air filtration, outdoor tools]
+python: shopify:Shopify
+options:
+  store: https://wenproducts.com
+manual_page: https://wenproducts.com/search?q={model_q}
+notes: >-
+  The store's product search; the manual linked in the product's description.
+tests:
+  - model: "3410"
+    note: air filtration system
+    expect: {kind: owners_manual, url_contains: 3410.manual}
+  - model: "56235i"
+    note: 2350-watt inverter generator
+    expect: {url_contains: cdn.shopify.com}

@@ -1,0 +1,193 @@
+name: Release
+
+# Pushing a version tag (v0.1.0) builds the sdist, the wheel and the container image, checks them, and publishes
+# them only when the repository variable RELEASE_ENABLED is "true" (Settings > Secrets and variables > Actions >
+# Variables). Until then, and on every manual run, it builds and checks everything and publishes nothing. The
+# steps to switch it on, and to make a release, are in docs/releasing.md.
+#
+# - PyPI: trusted publishing (OpenID Connect), so there is no API token to store. It needs a publisher on PyPI
+#   for this repository, this workflow file and the environment "pypi", whose required reviewer approves each
+#   upload.
+# - Container: ghcr.io/<owner>/<repo>, for linux/amd64 and linux/arm64, tagged with the version; a final version
+#   (not a pre-release such as 0.2.0rc1) is also tagged <major>.<minor> and "latest".
+# - GitHub release: made last, from the tag, with the version's CHANGELOG.md section as its notes and the sdist
+#   and wheel attached.
+# - Third-party actions are pinned to commit SHAs (the version in a comment), since these jobs can publish;
+#   Dependabot keeps them current.
+
+on:
+  push:
+    tags: ["v[0-9]*"]
+  workflow_dispatch: # a dry run: builds and checks, publishes nothing
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build and check the packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install build twine
+      - run: python -m build
+      - run: twine check --strict dist/*
+      - name: The version, and whether it's a pre-release
+        id: version
+        run: |
+          version=$(python -c "import glob; print(glob.glob('dist/*.whl')[0].split('-')[1])")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if echo "$version" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then pre=false; else pre=true; fi
+          echo "prerelease=$pre" >> "$GITHUB_OUTPUT"
+          echo "version $version, pre-release: $pre"
+      - name: The tag matches the package's version
+        if: github.ref_type == 'tag'
+        env:
+          TAG: ${{ github.ref_name }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if [ "v$VERSION" != "$TAG" ]; then
+            echo "✗ tag $TAG doesn't match version $VERSION (src/manualbeagle/__init__.py)"; exit 1
+          fi
+          echo "✓ tag $TAG matches version $VERSION"
+      - name: CHANGELOG.md has a section for the version
+        if: github.ref_type == 'tag'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          grep -q "^## \[$VERSION\]" CHANGELOG.md || { echo "✗ no '## [$VERSION]' in CHANGELOG.md"; exit 1; }
+          echo "✓ CHANGELOG.md has [$VERSION]"
+      - name: The wheel and the sdist each install and run
+        run: |
+          for pkg in dist/*.whl dist/*.tar.gz; do
+            rm -rf /tmp/check && python -m venv /tmp/check
+            /tmp/check/bin/pip install --quiet "$pkg"
+            /tmp/check/bin/manualbeagle --version
+            /tmp/check/bin/manualbeagle adapters list > /dev/null
+            echo "✓ $pkg"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+
+  docker:
+    name: Build, check and (when enabled) publish the image
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build for this runner
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
+        run: docker build --build-arg "VERSION=$VERSION" -t manualbeagle:check .
+      - name: The image starts and answers
+        run: |
+          docker run -d --name mb -p 127.0.0.1:8765:8765 -e MANUALBEAGLE_WEB_TOKEN=check manualbeagle:check
+          for _ in $(seq 1 30); do curl -fs http://127.0.0.1:8765/healthz && break; sleep 1; done
+          curl -fs http://127.0.0.1:8765/healthz
+          docker exec mb manualbeagle --version
+          docker exec mb python -c "from manualbeagle.library import ocr_available; assert ocr_available(), 'no OCR'"
+          test "$(docker exec mb id -u)" = 1000
+          echo "✓ the image serves /healthz, has OCR and runs as uid 1000"
+          docker image ls manualbeagle:check
+      - name: Container log
+        if: always()
+        run: docker logs mb || true
+      - uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
+        if: github.ref_type == 'tag' && vars.RELEASE_ENABLED == 'true'
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+        if: github.ref_type == 'tag' && vars.RELEASE_ENABLED == 'true'
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
+        if: github.ref_type == 'tag' && vars.RELEASE_ENABLED == 'true'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Image tags
+        id: tags
+        if: github.ref_type == 'tag' && vars.RELEASE_ENABLED == 'true'
+        env:
+          REPO_IMAGE: ghcr.io/${{ github.repository }}
+          VERSION: ${{ needs.build.outputs.version }}
+          PRE: ${{ needs.build.outputs.prerelease }}
+        run: |
+          image=$(echo "$REPO_IMAGE" | tr '[:upper:]' '[:lower:]')
+          tags="$image:$VERSION"
+          if [ "$PRE" = false ]; then tags="$tags,$image:${VERSION%.*},$image:latest"; fi
+          echo "tags=$tags" >> "$GITHUB_OUTPUT"
+          echo "$tags"
+      - uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
+        if: github.ref_type == 'tag' && vars.RELEASE_ENABLED == 'true'
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          build-args: VERSION=${{ needs.build.outputs.version }}
+          tags: ${{ steps.tags.outputs.tags }}
+
+  pypi:
+    name: Publish to PyPI
+    needs: [build, docker]
+    if: github.ref_type == 'tag' && vars.RELEASE_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: pypi
+      url: https://pypi.org/project/manualbeagle/
+    permissions:
+      id-token: write # trusted publishing
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
+
+  github-release:
+    name: The GitHub release
+    needs: [build, pypi]
+    if: github.ref_type == 'tag' && vars.RELEASE_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - name: Notes from CHANGELOG.md, then the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          VERSION: ${{ needs.build.outputs.version }}
+          PRE: ${{ needs.build.outputs.prerelease }}
+        run: |
+          awk -v v="$VERSION" '
+            index($0, "## [" v "]") == 1 { on = 1; next }
+            on && /^## \[/ { exit }
+            on && /^\[[^]]+\]: / { exit }
+            on { print }
+          ' CHANGELOG.md > notes.md
+          test -s notes.md || { echo "✗ CHANGELOG.md has no notes for $VERSION"; exit 1; }
+          flags=""
+          if [ "$PRE" = true ]; then flags="--prerelease"; fi
+          gh release create "$TAG" dist/* --verify-tag --title "$VERSION" --notes-file notes.md $flags

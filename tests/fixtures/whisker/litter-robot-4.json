@@ -1,0 +1,14 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.litter-robot.com/support/article/litter-robot-4-manual/",
+   "status": 200,
+   "url": "https://www.litter-robot.com/support/article/litter-robot-4-manual/",
+   "headers": {
+    "content-length": "21469",
+    "content-type": "text/html; charset=UTF-8"
+   },
+   "text": "href=\"/manual_pdf/Litter-Robot-4-Manual.pdf\"\nhref=\"/manual_pdf/Litter-Robot-4-Manual.pdf\"\nhref=\"/manual_pdf/Litter-Robot-4-Manual-English-International.pdf\"\nhref=\"/manual_pdf/Litter-Robot-4-Manual-English-International.pdf\"\nhref=\"/manual_pdf/Litter-Robot-4-Manual-Francais-Manuel-d-instruction.pdf\"\nhref=\"/manual_pdf/Litter-Robot-4-Manual-Deutsch-Bedienungsanleitung.pdf\"\nhref=\"/manual_pdf/Litter-Robot-4-Manual-Italiano-Manuale-d-istruzioni.pdf\"\nhref=\"/manual_pdf/Litter-Robot-4-Manual-Nederlands-Handleiding.pdf\"\nhref=\"/manual_pdf/Litter-Robot-4-Manual-Espanol-Manual-de-instrucciones.pdf\"\nhref=\"/manual_pdf/Litter-Robot-4-Manual-JP.pdf\"\nhref=\"/manual_pdf/Litter-Robot-4-Manual-Korean.pdf\"\nhref=\"/manual_pdf/Litter-Robot-4-Manual-Dansk-Instruktionshandbog.pdf\""
+  }
+ ]
+}

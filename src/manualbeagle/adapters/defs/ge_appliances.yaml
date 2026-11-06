@@ -1,0 +1,38 @@
+# GE Appliances (US): GE, GE Profile, Café, Monogram, Haier and Hotpoint.
+# Site: products.geappliances.com/appliance/gea-specs/<MODEL> redirects to the model's product page on
+# www.geappliances.com, whose embedded product data lists documents as {"name": "Documents_<n>_<label>",
+# "value": "<url>"} pairs (escaped JSON in the page), with the PDFs on images.salsify.com.
+# Known gaps: a discontinued model's spec page may 404; parts lists aren't in the product data.
+# Last verified: 2026-11-03.
+brand: GE Appliances
+aliases: [GE, General Electric, GE Profile, Café, Cafe, Monogram, Hotpoint, Haier]
+domains: [geappliances.com, products.geappliances.com, images.salsify.com]
+status: works
+categories: [refrigerators, freezers, laundry, ranges, dishwashers, air conditioners, water heaters]
+manual_page: https://products.geappliances.com/appliance/gea-specs/{model_path}
+notes: >-
+  The product page's embedded document list (Use and Care Manual, Installation Instructions, Quick Specs,
+  Energy Guide, Warranty) on images.salsify.com.
+search:
+  - url: https://products.geappliances.com/appliance/gea-specs/{model_path}
+    format: regex
+    results: 'Documents_\d+_(?P<label>[^"\\]+)\\*"\s*,\s*\\*"value\\*"\s*:\s*\\*"(?P<url>https://images\.salsify\.com/[^"\\]+?\.pdf)'
+    fields: {url: url, title: '=GE {label}', kind: label}
+kinds:
+  Use and Care Manual: owners_manual
+  Owner's Manual: owners_manual
+  Installation Instructions: install_guide
+  Quick Specs: spec_sheet
+  Dimension Guide: spec_sheet
+  Energy Guide: energy_guide
+  Warranty: warranty
+tests:
+  - model: FCM7SKWW
+    note: 7.0 cu ft chest freezer
+    expect: {kind: owners_manual, url_contains: images.salsify.com}
+  - model: GTW465ASNWW
+    note: top-load washer
+    expect: {kind: owners_manual}
+  - model: JB645RKSS
+    note: electric range
+    expect: {kind: install_guide}

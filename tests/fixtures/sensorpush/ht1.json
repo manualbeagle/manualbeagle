@@ -1,0 +1,14 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.sensorpush.com/manuals",
+   "status": 200,
+   "url": "https://www.sensorpush.com/manuals",
+   "headers": {
+    "content-length": "33512",
+    "content-type": "text/html;charset=utf-8"
+   },
+   "text": "href=\"/s/htpxw-htw-manual.pdf\"\nhref=\"/s/htpxw-htw-manual.pdf\"\nhref=\"/s/ht1-manual.pdf\"\nhref=\"/s/SensorPushGateway-03-23-21-English_A4.pdf\"\nhref=\"/s/SensorPush-G1-Gateway-03-08-21-A4-German.pdf\"\nhref=\"/s/SensorPush-G1-Gateway-03-08-21-A4-French.pdf\"\nhref=\"/s/SensorPush-G1-Gateway-03-10-21-A4-Korean.pdf\"\nhref=\"/s/SensorPush-G1-Gateway-03-08-21-A4-Spanish.pdf\"\nhref=\"/s/SensorPush-G1-Gateway-03-08-21-A4-Italian.pdf\""
+  }
+ ]
+}

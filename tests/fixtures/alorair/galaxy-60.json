@@ -1,0 +1,13 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.alorair.com/product-details/alorair-galaxy-60",
+   "status": 200,
+   "url": "https://www.alorair.com/product-details/alorair-galaxy-60",
+   "headers": {
+    "content-type": "text/html; charset=UTF-8"
+   },
+   "text": "<span>Specification Sheet</span>\n                                                        <a href=\"https://www.alorair.com/pdf_files/product_guides/245/AlorAir-Galaxy-60-Specification-20250917.pdf\"\n<span>User Guide</span>\n                                                        <a href=\"https://www.alorair.com/pdf_files/product_guides/245/Galaxy-60-User-Manual-Outline.pdf\""
+  }
+ ]
+}

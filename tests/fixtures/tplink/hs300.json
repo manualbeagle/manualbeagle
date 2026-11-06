@@ -1,0 +1,14 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.tp-link.com/us/support/download/hs300/",
+   "status": 200,
+   "url": "https://www.tp-link.com/us/support/download/hs300/",
+   "headers": {
+    "content-type": "text/html; charset=UTF-8",
+    "content-length": "28004"
+   },
+   "text": "data-vars-event-category=\"Download-Datasheet_HS300\" href=\"/us/document/78499/\">HS300(US)_V2.8_Datasheet<\ndata-vars-event-category=\"Download-UserGuide_HS300\" href=\"/us/document/80903/\">HS300(US)_V2.8_User Guide<\ndata-vars-event-category=\"Download-QuickInstallationGuide_HS300\" href=\"/us/document/80453/\">HS300(US)_V2.8_Quick Installation Guide<"
+  }
+ ]
+}

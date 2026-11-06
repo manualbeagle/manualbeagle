@@ -1,0 +1,40 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.honeywellhome.com/products/smart-thermostat-compatible-wireless-room-sensor",
+   "status": 200,
+   "url": "https://www.honeywellhome.com/products/smart-thermostat-compatible-wireless-room-sensor",
+   "headers": {
+    "content-type": "text/html; charset=utf-8"
+   },
+   "text": "<html><body><script>\"handle\":\"smart-thermostat-compatible-wireless-room-sensor\",\"variants\":[{\"id\":44075910955110,\"price\":4499,\"name\":\"Smart Thermostat Compatible Wireless Room Sensor - XRSENSOR-1PK\\/U; Smart Thermostat Compatible Wireless Room Sensor\",\"public_title\":\"XRSENSOR-1PK\\/U; Smart Thermostat Compatible Wireless Room Sensor\",\"sku\":\"XRSENSOR-1PK\\/U\"}]</script>\n<div class=\"resource-card\"><a href=\"https://digitalassets.resideo.com/damroot/Original\\10013\\33-00735EFS.pdf\" target=\"_blank\">\n                              <div class=\"item-pdf-text\">\n                                <div class=\"resource-icon\">\n                                  \n\n                                </div>\n                                <div class=\"resource-heading\">\n                                  <span class=\"sr-only\">link</span> \n                                  Getting Started Guide:  Redlink™ 3.0 Indoor Air Sensors (English, Spanish)\n                                  <span class=\"sr-only\">pdf</span> \n                                </div>\n                              </div>\n                            </a></div>\n<div class=\"resource-card\"><a href=\"https://digitalassets.resideo.com/damroot/Original\\10014\\33-00730EF.pdf\" target=\"_blank\">\n                              <div class=\"item-pdf-text\">\n                                <div class=\"resource-icon\">\n                                  \n\n                                </div>\n                                <div class=\"resource-heading\">\n                                  <span class=\"sr-only\">link</span> \n                                  X8S Series Smart Thermostat User Guide (English, French)\n                                  <span class=\"sr-only\">pdf</span> \n                                </div>\n                              </div>\n                            </a></div>\n<div class=\"resource-card\"><a href=\"https://digitalassets.resideo.com/damroot/Original\\10014\\33-00731ES.pdf\" target=\"_blank\">\n                              <div class=\"item-pdf-text\">\n                                <div class=\"resource-icon\">\n                                  \n\n                                </div>\n                                <div class=\"resource-heading\">\n                                  <span class=\"sr-only\">link</span> \n                                  X8S Series Smart Thermostat User Guide (English, Spanish)\n                                  <span class=\"sr-only\">pdf</span> \n                                </div>\n                              </div>\n                            </a></div>\n</body></html>"
+  },
+  {
+   "key": "GET https://www.honeywellhome.com/products/t9-smart-sensor-1",
+   "status": 200,
+   "url": "https://www.honeywellhome.com/products/t9-smart-sensor-1",
+   "headers": {
+    "content-type": "text/html; charset=utf-8"
+   },
+   "text": "<html><body><script>\"handle\":\"t9-smart-sensor-1\",\"variants\":[{\"id\":43065178161254,\"price\":0,\"name\":\"T9 Smart Sensor - RCHTSENSOR-1PK\\/U; T9 Smart Sensor\",\"public_title\":\"RCHTSENSOR-1PK\\/U; T9 Smart Sensor\",\"sku\":\"RCHTSENSOR-1PK\\/U\"},{\"id\":43065178194022,\"price\":0,\"name\":\"T9 Smart Sensor - RCHTSENSOR-2PK\\/U; T9 Smart Sensor 2-Pack\",\"public_title\":\"RCHTSENSOR-2PK\\/U; T9 Smart Sensor 2-Pack\",\"sku\":\"RCHTSENSOR-2PK\\/U\"}]</script>\n<div class=\"resource-card\"><a href=\"https://digitalassets.resideo.com/damroot/Original\\10014\\33-00429EFS.pdf\" target=\"_blank\">\n                              <div class=\"item-pdf-text\">\n                                <div class=\"resource-icon\">\n                                  \n\n                                </div>\n                                <div class=\"resource-heading\">\n                                  <span class=\"sr-only\">link</span> \n                                  Quick Start Guide for Sensor 2-Pack (English, French, Spanish)\n                                  <span class=\"sr-only\">pdf</span> \n                                </div>\n                              </div>\n                            </a></div>\n</body></html>"
+  },
+  {
+   "key": "GET https://www.honeywellhome.com/products/t9-t10-old-version-room-sensor",
+   "status": 200,
+   "url": "https://www.honeywellhome.com/products/t9-t10-old-version-room-sensor",
+   "headers": {
+    "content-type": "text/html; charset=utf-8"
+   },
+   "text": "<html><body><script>\"handle\":\"t9-t10-old-version-room-sensor\",\"variants\":[{\"id\":43065171705958,\"price\":4099,\"name\":\"T9 T10 Old Version Room Sensor - C7189R2002-2\\/U; Old Version - T9 and T10 Smart Sensor 1-pack\",\"public_title\":\"C7189R2002-2\\/U; Old Version - T9 and T10 Smart Sensor 1-pack\",\"sku\":\"C7189R2002-2\\/U\"}]</script>\n<div class=\"resource-card\"><a href=\"https://digitalassets.resideo.com/damroot/Original\\10014\\33-00429EFS.pdf\" target=\"_blank\">\n                              <div class=\"item-pdf-text\">\n                                <div class=\"resource-icon\">\n                                  \n\n                                </div>\n                                <div class=\"resource-heading\">\n                                  <span class=\"sr-only\">link</span> \n                                  Quick Start Guide for Sensor 2-Pack (English, French, Spanish)\n                                  <span class=\"sr-only\">pdf</span> \n                                </div>\n                              </div>\n                            </a></div>\n</body></html>"
+  },
+  {
+   "key": "GET https://www.honeywellhome.com/search/suggest.json?q=RCHTSENSOR&resources%5Blimit%5D=6&resources%5Boptions%5D%5Bfields%5D=title%2Cvariants.sku%2Cvariants.title%2Cbody&resources%5Btype%5D=product",
+   "status": 200,
+   "url": "https://www.honeywellhome.com/search/suggest.json?q=RCHTSENSOR&resources%5Btype%5D=product&resources%5Blimit%5D=6&resources%5Boptions%5D%5Bfields%5D=title%2Cvariants.sku%2Cvariants.title%2Cbody",
+   "headers": {
+    "content-type": "application/json; charset=utf-8"
+   },
+   "text": "{\"resources\": {\"results\": {\"products\": [{\"handle\": \"t9-smart-sensor-1\", \"title\": \"T9 Smart Sensor\"}, {\"handle\": \"smart-thermostat-compatible-wireless-room-sensor\", \"title\": \"Smart Thermostat Compatible Wireless Room Sensor\"}, {\"handle\": \"t9-t10-old-version-room-sensor\", \"title\": \"T9 T10 Old Version Room Sensor\"}, {\"handle\": \"old-t9-t10-smart-sensor-1-pack\", \"title\": \"Old T9/T10 Smart Sensor 1 Pack\"}, {\"handle\": \"x8s-smart-thermostat\", \"title\": \"X8S Smart Thermostat\"}, {\"handle\": \"c7189r-redlink\\u00ae-room-sensors\", \"title\": \"C7189R RedLINK\\u00ae Room Sensors\"}]}}}"
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+# Whisker (Litter-Robot, Feeder-Robot). See adapters/py/whisker.py for how it searches.
+brand: Whisker
+aliases: [Litter-Robot, Litter Robot, Whisker Litter-Robot, AutoPets]
+domains: [litter-robot.com, whisker.com]
+status: works
+categories: [self-cleaning litter boxes, pet feeders]
+python: whisker:Whisker
+manual_page: https://www.litter-robot.com/support/
+notes: >-
+  Each robot's manual article on litter-robot.com links its PDFs in every language. A Pro uses its model's manual.
+tests:
+  - model: Litter-Robot 5 Pro
+    note: self-cleaning litter box (uses the Litter-Robot 5 manual)
+    expect: {kind: owners_manual, url_contains: Litter-Robot-5-Manual, text_contains: Litter-Robot 5}
+  - model: Litter-Robot 4
+    note: earlier self-cleaning litter box
+    expect: {kind: owners_manual, url_contains: Litter-Robot-4}

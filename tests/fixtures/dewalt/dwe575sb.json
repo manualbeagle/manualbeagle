@@ -1,0 +1,13 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.dewalt.com/product/dwe575sb",
+   "status": 200,
+   "url": "https://www.dewalt.com/en-us/product/dwe575sb/7-14-lightweight-circular-saw-contractor-bag-tool-only",
+   "headers": {
+    "content-type": "text/html; charset=utf-8"
+   },
+   "text": "https://assets.dewalt.com/GLOBALBOM/QU/DWE575SB/10/Instruction_Manual/EN/N786997.pdf\nhttps://assets.dewalt.com/GLOBALBOM/QU/DWE575SB/10/Instruction_Manual/EN/N786997.pdf"
+  }
+ ]
+}

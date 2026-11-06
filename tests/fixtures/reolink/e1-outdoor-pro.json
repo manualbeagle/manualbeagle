@@ -1,0 +1,22 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://apis.reolink.com/v2/official-site-data-cache/common/navigate/search-bar/product/list?country=US&keyword=E1+OUTDOOR+PRO&lang=en&limit=8",
+   "status": 200,
+   "url": "https://apis.reolink.com/v2/official-site-data-cache/common/navigate/search-bar/product/list?lang=en&country=US&keyword=E1+OUTDOOR+PRO&limit=8",
+   "headers": {
+    "content-type": "application/json"
+   },
+   "text": "{\"items\": [{\"name\": \"E1 Outdoor Pro\", \"key\": \"e1-outdoor-pro\"}, {\"name\": \"Home Hub with E1 Outdoor Pro\", \"key\": \"home-hub-with-e1-outdoor-pro\"}, {\"name\": \"Home Hub Pro with E1 Outdoor Pro\", \"key\": \"home-hub-pro-with-e1-outdoor-pro\"}, {\"name\": \"Home Hub Mini with E1 Outdoor Pro\", \"key\": \"home-hub-mini-with-e1-outdoor-pro\"}]}"
+  },
+  {
+   "key": "GET https://support.reolink.com/c/e1-outdoor-pro/",
+   "status": 200,
+   "url": "https://support.reolink.com/c/e1-outdoor-pro/",
+   "headers": {
+    "content-type": "text/html; charset=utf-8"
+   },
+   "text": "\"title\":\"User Manual\",\"downloadUrl\":\"https://reolink.com/wp-content/assets/multiple-languages/manual/Reolink_Wireless_Camera_User_Manual.pdf?download_name=Reolink_Wireless_Camera_User_Manual.pdf\""
+  }
+ ]
+}

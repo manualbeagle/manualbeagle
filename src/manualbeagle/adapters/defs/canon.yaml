@@ -1,0 +1,19 @@
+# Canon (US): printers and cameras.
+# Site: www.usa.canon.com/support/p/<product> lists manuals hosted on gdlp01.c-wss.com, but the site answers
+# automated requests with HTTP 403 (bot protection, 2026-11-03), which we don't get around. Web search finds the
+# PDFs on gdlp01.c-wss.com, which ranks as the maker's own.
+# Last verified: 2026-11-03.
+brand: Canon
+aliases: [Canon USA]
+domains: [canon.com, usa.canon.com, c-wss.com]
+status: blocked
+categories: [printers, cameras]
+manual_page: https://www.usa.canon.com/support
+notes: >-
+  www.usa.canon.com answers automated requests with HTTP 403 (bot protection, 2026-11-03). Falls back to web
+  search, which finds Canon's PDFs on gdlp01.c-wss.com.
+tests:
+  - model: imagePROGRAF PRO-300
+    skip: site behind bot protection (403, 2026-11-03)
+  - model: SELPHY CP1500
+    skip: site behind bot protection (403, 2026-11-03)

@@ -1,0 +1,26 @@
+# Samsung, US site. See adapters/py/samsung.py for how it searches.
+brand: Samsung
+aliases: [Samsung Electronics]
+domains: [samsung.com, downloadcenter.samsung.com]
+status: works
+categories: [TVs, soundbars, appliances, monitors, phones, tablets]
+python: samsung:Samsung
+manual_page: https://www.samsung.com/us/support/downloads/?model={model_path}
+notes: >-
+  The support page's product-detail JSON. Needs the full model code from the label or box (QN65QN85AAFXZA).
+tests:
+  - model: QN65QN85AAFXZA
+    note: 65-inch QN85A TV, living room
+    expect: {kind: owners_manual, url_contains: downloadcenter.samsung.com}
+  - model: HW-Q800A/ZA
+    note: soundbar
+    expect: {kind: owners_manual}
+  - model: SWA-9500S/ZA
+    note: wireless rear speaker kit
+    expect: {min_results: 1}
+  - model: WMN4277ST/ZA
+    note: wall mount
+    skip: Samsung's support API knows the model but lists no documents for it (checked 2026-11-03)
+  - model: UN50HU7000
+    note: 50-inch TV from 2014
+    skip: too old for Samsung's support API (404 for UN50HU7000 and UN50HU7000FXZA, 2026-11-03); web search covers it

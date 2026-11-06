@@ -1,0 +1,22 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://api-a.ecoflow.com/website/cms/downloadInfoForWeb/downloadInfo/v2?page=1&size=50&title=DELTA+2",
+   "status": 200,
+   "url": "https://api-a.ecoflow.com/website/cms/downloadInfoForWeb/downloadInfo/v2?page=1&size=50&title=DELTA+2",
+   "headers": {
+    "content-type": "application/json; charset=UTF-8"
+   },
+   "text": "{\"code\": \"0\", \"data\": {\"content\": [{\"title\": \"EcoFlow DELTA 2 Smart Extra Battery-User Manual V1.1 (EN)\", \"fileUrl\": \"https://ecoflow-service-us-prod.oss-us-west-1.aliyuncs.com/cms/upload/1741164012665/EcoFlow%20DELTA%202%20Smart%20Extra%20Battery-User%20Manual%20V1.1%20(EN).pdf\", \"classify\": \"MANUAL\", \"lang\": \"en_US\", \"type\": 1, \"subType\": 1}, {\"title\": \"EcoFlow DELTA 2 Max-QUICK START GUIDE_V1.0\", \"fileUrl\": \"https://ecoflow-service-us-prod.oss-us-west-1.aliyuncs.com/cms/upload/1756903162339/DELTA%20Max(LFP)-120x200mm-V0.1.pdf\", \"classify\": \"MANUAL\", \"lang\": \"en_US\", \"type\": 1, \"subType\": 1}, {\"title\": \"EcoFlow DELTA 2 Max Smart Extra Battery-User Manual V1.0 (EN)\", \"fileUrl\": \"https://websiteoss.ecoflow.com/cms/upload/2023/5/18/EcoFlow%20DELTA%202%20Max%20Smart%20Extra%20Battery-User%20Manual%20V1.0%20(EN)_1684404521057.pdf\", \"classify\": \"MANUAL\", \"lang\": \"en_US\", \"type\": 1, \"subType\": 1}, {\"title\": \"How to Use DELTA 2 Max\", \"fileUrl\": \"https://www.youtube.com/watch?v=VX5w3uIldNg\", \"classify\": \"VIDEO_COURSE\", \"lang\": \"en_US\", \"type\": null, \"subType\": null}, {\"title\": \"How to Charge Delta 2\", \"fileUrl\": \"https://www.youtube.com/watch?v=g1O0zgCNZag\", \"classify\": \"VIDEO_COURSE\", \"lang\": \"en_US\", \"type\": null, \"subType\": null}, {\"title\": \"How to Use Delta 2\", \"fileUrl\": \"https://www.youtube.com/watch?v=uo5aOWS_XCE&list=PLzLRfwXFBuhbwrWHbBTs9J9uCI2tdbKkN&index=3&t=1s\", \"classify\": \"VIDEO_COURSE\", \"lang\": \"en_US\", \"type\": null, \"subType\": null}, {\"title\": \"EcoFlow DELTA 2-Troubleshooting V1.0 (EN+DE+FR+IT+ES+NL+RU+JP+KR+CHS+CHT)\", \"fileUrl\": \"https://websiteoss.ecoflow.com/cms/upload/2023/12/18/EcoFlow%20DELTA%202-Troubleshooting%20V1.0%20(EN%2BDE%2BFR%2BIT%2BES%2BNL%2BRU%2BJP%2BKR%2BCHS%2BCHT)_1702869073192.pdf\", \"classify\": \"MANUAL\", \"lang\": \"en_US\", \"type\": 1, \"subType\": 2}, {\"title\": \"EcoFlow DELTA 2 Max & EcoFlow DELTA 2 Max S & EcoFlow E2000-Troubleshooting V1.0 (EN+DE+FR+IT+ES+NL+RU+JP+KR+CHS+CHT)\", \"fileUrl\": \"https://ecoflow-service-us-prod.oss-us-west-1.aliyuncs.com/cms/upload/1748314579533/EcoFlow%20DELTA%202%20Max%20%26%20EcoFlow%20DELTA%202%20Max%20S%20%26%20EcoFlow%20E2000-Troubleshooting%20V1.0%20(EN%2BDE%2BFR%2BIT%2BES%2BNL%2BRU%2BJP%2BKR%2BCHS%2BCHT).pdf\", \"classify\": \"MANUAL\", \"lang\": \"en_US\", \"type\": 1, \"subType\": 2}, {\"title\": \"EcoFlow DELTA 2-User Manual\", \"fileUrl\": \"https://manuals.ecoflow.com/us/product/delta-2-portable-power-station?lang=en_US\", \"classify\": \"ONLINE\", \"lang\": \"en_US\", \"type\": 1, \"subType\": 1}, {\"title\": \"EcoFlow DELTA 2 Max-User Manual\", \"fileUrl\": \"https://manuals.ecoflow.com/us/product/delta-2-max-portable-power-station?lang=en_US\", \"classify\": \"ONLINE\", \"lang\": \"en_US\", \"type\": 1, \"subType\": 1}]}}"
+  },
+  {
+   "key": "GET https://manuals.ecoflow.com/us/product/delta-2-portable-power-station?lang=en_US",
+   "status": 200,
+   "url": "https://manuals.ecoflow.com/us/product/delta-2-portable-power-station?lang=en_US",
+   "headers": {
+    "content-type": "text/html; charset=utf-8"
+   },
+   "text": "\"title\":\"DELTA 2 User Manual\",\"pdfAddress\":\"https://ecoflow-service-us-prod.oss-us-west-1.aliyuncs.com/cms/manual/1753868387404/DELTA%202%20User%20Manual.pdf\""
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+# CyberPower (US): UPS units and surge protectors.
+# Site: www.cyberpowersystems.com/resources/<model>-um/ is each model's user-manual page, but the whole site answers
+# automated requests with AWS WAF's "Human Verification" challenge (HTTP 405, 2026-11-03), which we don't get
+# around. Web search finds the maker's resource pages (offered as links) and copies of the manuals.
+# Last verified: 2026-11-03.
+brand: CyberPower
+aliases: [CyberPower Systems, Cyber Power]
+domains: [cyberpowersystems.com]
+status: blocked
+categories: [UPS, surge protectors]
+manual_page: https://www.cyberpowersystems.com/resources/{model_lower}-um/
+notes: >-
+  cyberpowersystems.com sits behind AWS WAF's human-verification challenge (2026-11-03). The manual_page link
+  pattern works for a person; web search fills in.
+tests:
+  - model: CP1500PFCLCD
+    skip: site behind bot protection (AWS WAF, 2026-11-03)

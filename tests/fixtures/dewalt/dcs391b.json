@@ -1,0 +1,13 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.dewalt.com/product/dcs391b",
+   "status": 200,
+   "url": "https://www.dewalt.com/en-us/product/dcs391b/20v-max-6-12-circular-saw-tool-only",
+   "headers": {
+    "content-type": "text/html; charset=utf-8"
+   },
+   "text": "https://assets.dewalt.com/GLOBALBOM/QU/DCS391B/2/Instruction_Manual/EN/N382847_DCS391.pdf\nhttps://assets.dewalt.com/GLOBALBOM/QU/DCS391B/2/Instruction_Manual/EN/N382847_DCS391.pdf"
+  }
+ ]
+}

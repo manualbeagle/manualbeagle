@@ -1,0 +1,48 @@
+name: New brand
+description: Ask for (or offer to write) an adapter for a brand Manual Beagle doesn't know yet.
+title: "Brand: "
+labels: ["brand"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks! Check [docs/brands.md](https://github.com/manualbeagle/manualbeagle/blob/main/docs/brands.md) first: the brand may already be there under
+        another name. Writing the adapter yourself is usually about 15 minutes; [CONTRIBUTING.md](https://github.com/manualbeagle/manualbeagle/blob/main/CONTRIBUTING.md) walks through it.
+  - type: input
+    id: brand
+    attributes:
+      label: Brand
+      description: As it's written on the rating plate, and any other names it goes by.
+      placeholder: "AlorAir (also AlorAir Solutions)"
+    validations:
+      required: true
+  - type: input
+    id: site
+    attributes:
+      label: The maker's support or manuals page
+      description: Where a person finds manuals on the maker's own site.
+      placeholder: "https://www.example.com/support"
+    validations:
+      required: true
+  - type: textarea
+    id: models
+    attributes:
+      label: Example models
+      description: Two or more real model numbers, ideally ones you own, so the adapter has test cases.
+      placeholder: |
+        Galaxy 60
+        Sentinel HD55
+    validations:
+      required: true
+  - type: textarea
+    id: how
+    attributes:
+      label: How the site lists documents (if you know)
+      description: PDF links in the page's HTML, JSON embedded in the page, or an API the page calls. The browser's developer tools (Network tab) show it.
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: Fetching rules
+      options:
+        - label: As far as I can tell, the site's terms don't forbid automated access, and it doesn't need a login or pass a CAPTCHA to reach the manuals (if it does, say so above; it can still get a link-only adapter).
+        - label: I'd like to write this adapter myself.

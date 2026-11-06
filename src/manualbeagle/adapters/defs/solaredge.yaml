@@ -1,0 +1,18 @@
+# SolarEdge (solar inverters, power optimizers, batteries).
+# Site: www.solaredge.com and its document host knowledge-center.solaredge.com both answered automated requests
+# with a bot wall (HTTP 403, 2026-11-03), which we don't get around. Installation guides and datasheets cover a
+# range of models (the HD-Wave guide covers every SE...H-US inverter).
+# Last verified: 2026-11-03.
+brand: SolarEdge
+aliases: [SolarEdge Technologies, Solar Edge]
+domains: [solaredge.com, knowledge-center.solaredge.com]
+status: blocked
+categories: [solar inverters, power optimizers, batteries]
+manual_page: https://www.solaredge.com/us/search?keys={model_q}
+notes: >-
+  solaredge.com and its document host sit behind a bot wall (2026-11-03). Falls back to web search; installers and
+  distributors often post SolarEdge's datasheets.
+tests:
+  - model: SE10000H-US
+    note: HD-Wave inverter
+    skip: site behind bot protection (2026-11-03)

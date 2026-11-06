@@ -1,0 +1,24 @@
+# Resideo / Honeywell Home (US). See adapters/py/resideo.py for how it searches.
+brand: Resideo
+aliases: [Honeywell Home, Honeywell, Resideo Honeywell Home]
+domains: [honeywellhome.com, resideo.com, digitalassets.resideo.com]
+status: works
+categories: [thermostats, sensors, water leak detectors, air purifiers, humidifiers]
+python: resideo:Resideo
+manual_page: https://www.honeywellhome.com/search?q={model_q}
+notes: >-
+  Honeywell Home's store search, then each product page's document cards (PDFs on digitalassets.resideo.com).
+  Discontinued models without a store page fall back to web search.
+tests:
+  - model: RCHT9610WF
+    note: T9 smart thermostat
+    expect: {kind: owners_manual, url_contains: digitalassets.resideo.com, title_contains: T9, text_contains: RCHT9610}
+  - model: RCHTSENSOR
+    note: T9/T10 smart room sensor
+    expect: {min_results: 1, url_contains: digitalassets.resideo.com}
+  - model: TH6220WF2006
+    note: T6 Pro Smart thermostat
+    expect: {min_results: 1}
+  - model: RTH9585WF
+    note: Wi-Fi Smart Color thermostat
+    expect: {min_results: 1}

@@ -1,0 +1,138 @@
+name: Live adapters
+
+# Runs every adapter's test cases against the real sites, which is how we notice when a maker's site changes.
+#
+# - Every night once the repository is public. While it's private, Actions minutes count, so the schedule runs
+#   on Mondays only (the second cron line); each job's `if` picks the line that applies.
+# - The run's page shows the live scoreboard (docs/brands.md with a Live column) and a report of what broke; the
+#   JSON results, the log and both Markdown files are kept as the run's artifact for 30 days.
+# - A scheduled run keeps one issue labelled `live-adapters` current: opened when something breaks, its text
+#   replaced and a comment added each night it stays broken, closed when every case passes again. A manual run
+#   touches the issue only when asked to (the `report` input).
+# - Requests follow the project's fetching rules like any lookup: one at a time per site, with a delay, and
+#   nothing that crawls. A site that blocks the runner shows as ✗ blocked; nothing tries to get around it.
+
+on:
+  schedule:
+    - cron: "17 7 * * *" # nightly, public repository
+    - cron: "17 9 * * 1" # Mondays, private repository
+  workflow_dispatch:
+    inputs:
+      adapters:
+        description: "adapter ids, space-separated (blank: all)"
+        required: false
+      report:
+        description: "open, update or close the live-adapters issue"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: live-adapters
+  cancel-in-progress: false
+
+jobs:
+  live:
+    if: >-
+      github.event_name != 'schedule'
+      || (github.event.schedule == '17 7 * * *' && !github.event.repository.private)
+      || (github.event.schedule == '17 9 * * 1' && github.event.repository.private)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      broken: ${{ steps.report.outputs.broken }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e .
+      - name: Run live adapter tests
+        # The input goes through an environment variable, never into the script itself, so a value can't inject
+        # shell commands. It's split on spaces on purpose: one argument per adapter id.
+        env:
+          ADAPTERS: ${{ github.event.inputs.adapters }}
+        run: |
+          # shellcheck disable=SC2086 # split on purpose
+          manualbeagle adapters test --live --json live.json $ADAPTERS | tee live.txt
+        continue-on-error: true
+      - name: Live scoreboard
+        run: manualbeagle adapters scoreboard --live live.json --write live-brands.md
+      - name: What broke
+        id: report
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set +e
+          manualbeagle adapters report live.json --run-url "$RUN_URL" --write report.md
+          python -c "import json; r = json.load(open('live.json', encoding='utf-8')); print('broken=' + str(sum(x['status'] in ('fail', 'error', 'blocked') for x in r)))" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Summary
+        run: |
+          {
+            cat report.md
+            echo
+            echo '## Live scoreboard'
+            sed -n '/^| Brand /,$p' live-brands.md
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: live-adapters
+          path: |
+            live.json
+            live.txt
+            live-brands.md
+            report.md
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Fail the run when a case broke
+        env:
+          BROKEN: ${{ steps.report.outputs.broken }}
+        run: |
+          if [ "${BROKEN:-1}" != "0" ]; then echo "✗ $BROKEN broken case(s): see the summary"; exit 1; fi
+          echo "✓ every case that ran passed"
+
+  issue:
+    name: Keep the live-adapters issue current
+    needs: live
+    if: >-
+      always() && needs.live.outputs.broken != ''
+      && (github.event_name == 'schedule' || inputs.report == true)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: live-adapters
+      - name: Open, update or close the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          BROKEN: ${{ needs.live.outputs.broken }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          label=live-adapters
+          gh label create "$label" --color FBCA04 \
+            --description "An adapter's test cases fail against the maker's live site" --force
+          num=$(gh issue list --label "$label" --state open --json number --jq '.[0].number // empty')
+          today=$(date -u +%F)
+          if [ "$BROKEN" != "0" ]; then
+            if [ -n "$num" ]; then
+              gh issue edit "$num" --title "Live adapters: $BROKEN case(s) broken" --body-file report.md
+              gh issue comment "$num" --body "✗ $today: $BROKEN case(s) broken ([run]($RUN_URL)). The description has the current list."
+            else
+              gh issue create --title "Live adapters: $BROKEN case(s) broken" --label "$label" --body-file report.md
+            fi
+          elif [ -n "$num" ]; then
+            gh issue comment "$num" --body "✓ $today: every case that ran passed ([run]($RUN_URL)). Closing."
+            gh issue close "$num"
+          else
+            echo "✓ nothing broken and no open issue"
+          fi

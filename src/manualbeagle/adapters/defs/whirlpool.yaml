@@ -1,0 +1,19 @@
+# Whirlpool Corporation (US): Whirlpool, Maytag, KitchenAid, Amana, JennAir.
+# Site: each brand's site has a manuals page (www.whirlpool.com/services/manuals.html and the like), but on
+# 2026-11-03 www.whirlpool.com, www.maytag.com and www.kitchenaid.com held automated requests open until they
+# timed out, the way a bot manager does, so no adapter reads them; producthelp.whirlpool.com answers but has no
+# per-model document list. Web search finds the brands' PDFs, which are on the makers' own domains.
+# Last verified: 2026-11-03.
+brand: Whirlpool
+aliases: [Whirlpool Corporation, Maytag, KitchenAid, Amana, JennAir, Jenn-Air]
+domains: [whirlpool.com, maytag.com, kitchenaid.com, amana.com, jennair.com]
+status: blocked
+categories: [refrigerators, freezers, laundry, ranges, dishwashers, microwaves]
+manual_page: https://www.whirlpool.com/services/manuals.html
+notes: >-
+  The brands' sites don't answer automated requests (they hang until timeout, 2026-11-03). Falls back to web
+  search; the manuals page is offered as a link for a person to open.
+tests:
+  - model: WRF555SDFZ
+    note: French-door refrigerator
+    skip: sites don't answer automated requests (2026-11-03)

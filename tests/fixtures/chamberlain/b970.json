@@ -1,0 +1,23 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.chamberlain.com/search?q=B970",
+   "status": 200,
+   "url": "https://www.chamberlain.com/search?q=B970",
+   "headers": {
+    "content-type": "text/html;charset=UTF-8"
+   },
+   "text": "<div data-coveo-search-token=\"TOKEN\" data-coveo-organization-id=\"chamberlaingroupk5f2dpwl\">"
+  },
+  {
+   "key": "POST https://chamberlaingroupk5f2dpwl.org.coveo.com/rest/search/v2 #61e439cd1871",
+   "status": 200,
+   "url": "https://chamberlaingroupk5f2dpwl.org.coveo.com/rest/search/v2",
+   "headers": {
+    "content-type": "application/json;charset=utf-8",
+    "content-length": "4844"
+   },
+   "text": "{\"totalCount\": 7, \"results\": [{\"title\": \"Chamberlain B353, B353C, B373, B550, B550C, B750, B750C, B751C, B970, B970C, B1381, B1381C Installation Manual - English (Manufactured Prior to 2022)\", \"clickUri\": \"https://cgi.widen.net/content/sctylnqkst/original/114-5338.pdf?u=mcyivk&download=true&cv=Online\", \"raw\": {\"language\": [\"English\"]}}, {\"title\": \"Chamberlain B970 Owner's Manual - Spanish\", \"clickUri\": \"https://cgi.widen.net/content/cq8zuva4by/original/114A5036SP.pdf?u=mcyivk&download=true&cv=Online\", \"raw\": {\"language\": [\"Spanish\"]}}, {\"title\": \"Chamberlain B353, B353C, B373, B550, B550C, B750, B750C, B751C, B970, B970C, B1381, B1381C Installation Manual - Spanish (Manufactured Prior to 2022)\", \"clickUri\": \"https://cgi.widen.net/content/l59wyv4x0d/original/114-5338SP.pdf?u=mcyivk&download=true&cv=Online\", \"raw\": {\"language\": [\"Spanish\"]}}, {\"title\": \"Chamberlain B353, B353C, B373, B550, B550C, B750, B750C, B751C, B970, B970C, B1381, B1381C Installation Manual - French (Manufactured Prior to 2022)\", \"clickUri\": \"https://cgi.widen.net/content/f0fmumkfah/original/114-5458-000.pdf?u=mcyivk&download=true&cv=Online\", \"raw\": {\"language\": [\"French\"]}}, {\"title\": \"Chamberlain B353, B353C, B550, B550C, B750, B750C, B751C, B970, B970C, B1381, B1381C, B373 User's Guide - Spanish (Manufactured Prior to 2022)\", \"clickUri\": \"https://cgi.widen.net/content/f5xnb5f4nf/original/114-5339SP.pdf?u=mcyivk&download=true&cv=Online\", \"raw\": {\"language\": [\"Spanish\"]}}, {\"title\": \"Chamberlain Smart Garage Opener User's Guide - English, French (Manufactured Prior to 2022)\", \"clickUri\": \"https://cgi.widen.net/content/zkhh6qkcip/original/114-5339-000.pdf?u=mcyivk&download=true&cv=Online\", \"raw\": {\"language\": [\"English\"]}}, {\"title\": \"Chamberlain B980 Owner's Manual - Spanish\", \"clickUri\": \"https://cgi.widen.net/content/juf3lraozp/original/114A5126SP.pdf?u=mcyivk&download=true&cv=Online\", \"raw\": {\"language\": [\"Spanish\"]}}]}"
+  }
+ ]
+}

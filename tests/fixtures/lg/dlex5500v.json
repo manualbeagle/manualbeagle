@@ -1,0 +1,13 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.lg.com/us/support/product/lg-DLEX5500V",
+   "status": 200,
+   "url": "https://www.lg.com/us/support/product/lg-DLEX5500V",
+   "headers": {
+    "content-type": "text/html; charset=utf-8"
+   },
+   "text": "<html><script id=\"__NEXT_DATA__\" type=\"application/json\">{\"props\": {\"pageProps\": {\"manualData\": {\"customerModelCode\": \"DLEX5500V\", \"csSalesCode\": \"DLEX5500V.ASSEEUS\", \"manualList\": [{\"manualType\": \"USER\", \"fileType\": \"HTML2\", \"fileName\": \"mrCAjWT8W4YElxdAOaSIA\", \"originalFileName\": \"MFL67652536.zip\", \"fileSize\": \"\", \"fileNamePrint\": \"English\", \"releaseDate\": \"05/31/2025\"}, {\"manualType\": \"USER\", \"fileType\": \"HTML2\", \"fileName\": \"LKY2gAT0h2OIEsV4hNmA\", \"originalFileName\": \"MFL71996102.zip\", \"fileSize\": \"\", \"fileNamePrint\": \"English,Spanish\", \"releaseDate\": \"03/07/2026\"}, {\"manualType\": \"USER\", \"fileType\": \"ZIP2\", \"fileName\": \"mrCAjWT8W4YElxdAOaSIA\", \"originalFileName\": \"MFL67652536.zip\", \"fileSize\": \"7,356K\", \"fileNamePrint\": \"English\", \"releaseDate\": \"05/31/2025\"}, {\"manualType\": \"USER\", \"fileType\": \"ZIP2\", \"fileName\": \"LKY2gAT0h2OIEsV4hNmA\", \"originalFileName\": \"MFL71996102.zip\", \"fileSize\": \"8,319K\", \"fileNamePrint\": \"English,Spanish\", \"releaseDate\": \"03/07/2026\"}, {\"manualType\": \"MANUAL\", \"fileType\": \"PDF\", \"fileName\": \"neGhE14Q3wa7xy1Kw6sB1w\", \"originalFileName\": \"DR_EUS_MFL71996102_05_260115_00_OM_WEB_EN.pdf\", \"fileSize\": \"4725K\", \"fileNamePrint\": \"English\", \"releaseDate\": \"02/24/2026\"}, {\"manualType\": \"MANUAL\", \"fileType\": \"PDF\", \"fileName\": \"GEvs23luojfiDAUXMfCGOw\", \"originalFileName\": \"DR_EUS_MFL71996102_05_260115_00_OM_WEB_SP.pdf\", \"fileSize\": \"4757K\", \"fileNamePrint\": \"Spanish\", \"releaseDate\": \"02/24/2026\"}]}}}}</script></html>"
+  }
+ ]
+}

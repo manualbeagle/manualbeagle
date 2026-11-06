@@ -1,0 +1,14 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.samsung.com/us/api/support/product/detail/SWA-9500S%2FZA.json",
+   "status": 200,
+   "url": "https://www.samsung.com/us/api/support/product/detail/SWA-9500S%2FZA.json",
+   "headers": {
+    "content-type": "application/json;charset=UTF-8",
+    "content-length": "1995"
+   },
+   "text": "{\"modelCode\": \"SWA-9500S/ZA\", \"modelName\": \"SWA-9500S\", \"manualsAndDownloads\": {\"UserManual\": {\"ENGLISH\": [{\"fileName\": \"User Manual\", \"type\": \"User Manual\", \"languageCode\": \"EN\", \"fileSize\": \"1.52 MB\", \"version\": \"1.0\", \"stdFileExtension\": \"pdf\", \"downloadUrl\": \"https://org.downloadcenter.samsung.com/downloadfile/ContentsFile.aspx?CDSite=US&CttFileID=8798817&CDCttType=UM&ModelType=C&ModelName=SWA-9500S/ZA&VPath=UM/202210/20221014170122832/VA81-01113A-02_UM_SWA-9500S_ZA_ENG_221011.0.pdf\"}]}, \"manuals\": {\"ENGLISH\": [{\"fileName\": \"User Manual\", \"type\": \"User Manual\", \"languageCode\": \"EN\", \"fileSize\": \"1.52 MB\", \"version\": \"1.0\", \"stdFileExtension\": \"pdf\", \"downloadUrl\": \"https://org.downloadcenter.samsung.com/downloadfile/ContentsFile.aspx?CDSite=US&CttFileID=8798817&CDCttType=UM&ModelType=C&ModelName=SWA-9500S/ZA&VPath=UM/202210/20221014170122832/VA81-01113A-02_UM_SWA-9500S_ZA_ENG_221011.0.pdf\"}]}, \"QuickStartGuide\": {}, \"InstallationGuide\": {}, \"FlashManual\": {}, \"Legal\": {}}}"
+  }
+ ]
+}

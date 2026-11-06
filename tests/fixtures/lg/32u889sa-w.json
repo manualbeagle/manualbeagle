@@ -1,0 +1,13 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.lg.com/us/support/product/lg-32U889SA-W",
+   "status": 200,
+   "url": "https://www.lg.com/us/support/product/lg-32U889SA-W",
+   "headers": {
+    "content-type": "text/html; charset=utf-8"
+   },
+   "text": "<html><script id=\"__NEXT_DATA__\" type=\"application/json\">{\"props\": {\"pageProps\": {\"manualData\": {\"customerModelCode\": \"32U889SA-W\", \"csSalesCode\": \"32U889SA-W.AUS\", \"manualList\": [{\"manualType\": \"MANUAL\", \"fileType\": \"PDF\", \"fileName\": \"jSkPbZWX2dMlCc4JX0zZbA\", \"originalFileName\": \"ENG_US_GSCS.zip\", \"fileSize\": \"4685K\", \"fileNamePrint\": \"English\", \"releaseDate\": \"10/28/2026\"}, {\"manualType\": \"QUICK\", \"fileType\": \"PDF\", \"fileName\": \"4kS5cMsDNlQNsRBwBWBwXQ\", \"originalFileName\": \"MFL72097172_REV00_32U889SA_US_QSG-_-_GSCS.PDF\", \"fileSize\": \"41237K\", \"fileNamePrint\": \"English,Spanish\", \"releaseDate\": \"04/29/2026\"}, {\"manualType\": \"MANUAL\", \"fileType\": \"PDF\", \"fileName\": \"kwBB1aQIN6DDs2tdI71lLQ\", \"originalFileName\": \"SPA_US.pdf\", \"fileSize\": \"5278K\", \"fileNamePrint\": \"Spanish\", \"releaseDate\": \"09/28/2026\"}]}}}}</script></html>"
+  }
+ ]
+}

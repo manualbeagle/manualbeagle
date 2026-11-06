@@ -1,0 +1,21 @@
+# Levoit. See adapters/py/levoit.py for how it searches.
+# Site: levoit.com/pages/user-manuals, one page with every product's manual.
+# Last verified: 2026-11-03.
+brand: Levoit
+aliases: [LEVOIT, Vesync Levoit]
+domains: [levoit.com]
+status: works
+categories: [air purifiers, humidifiers, fans, vacuums]
+python: levoit:Levoit
+manual_page: https://levoit.com/pages/user-manuals
+kinds:
+  manual: owners_manual
+notes: >-
+  The user-manuals page's product cards, matched on the product's name (Classic 300S, Core 300S-P).
+tests:
+  - model: Classic300S
+    note: ultrasonic smart humidifier
+    expect: {kind: owners_manual, url_contains: levoit.com/cdn/shop/files}
+  - model: Core 300S-P
+    note: smart air purifier (the page has no plain Core 300S)
+    expect: {kind: owners_manual}

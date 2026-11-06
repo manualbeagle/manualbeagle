@@ -1,0 +1,26 @@
+# SPAN (smart electrical panels, EV chargers). See adapters/py/zendesk.py for how it searches.
+# Site: support.span.io, a Zendesk help centre whose "Owner Documents" and "System Designs & Specifications"
+# articles link each panel's datasheet and installation manual, and the owner's manual for every panel, on Google
+# Drive.
+# Last verified: 2026-11-03.
+brand: SPAN
+aliases: [SPAN.IO, Span Panel]
+domains: [span.io, support.span.io, drive.google.com]
+status: works
+categories: [electrical panels, EV chargers]
+python: zendesk:Zendesk
+options:
+  base: https://support.span.io
+  query: "{model} manual"
+  also: "^(Panel|Drive) Owner'?s Manual$"
+manual_page: https://support.span.io/hc/en-us/search?query={model_q}
+notes: >-
+  The help centre's article search; the panel's datasheet and installation manual, and the owner's manual that
+  covers every panel, on Google Drive.
+tests:
+  - model: MAIN 32
+    note: SPAN Panel MAIN 32
+    expect: {kind: install_guide, url_contains: drive.google.com}
+  - model: MAIN 40
+    note: SPAN Panel MAIN 40
+    expect: {kind: spec_sheet}

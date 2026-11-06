@@ -1,0 +1,24 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.mylinkdrive.com/api/v0/product/search?searchText=PAC-USWHS002-WF-2",
+   "status": 200,
+   "url": "https://www.mylinkdrive.com/api/v0/product/search?searchText=PAC-USWHS002-WF-2",
+   "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "content-length": "105"
+   },
+   "text": "{\"products\":[{\"enableId\":\"PAC-USWHS002-WF-2\",\"slugName\":\"PAC_USWHS002_WF_2\",\"name\":\"PAC-USWHS002-WF-2\"}]}"
+  },
+  {
+   "key": "GET https://www.mylinkdrive.com/api/v0/product?slugName=PAC_USWHS002_WF_2",
+   "status": 200,
+   "url": "https://www.mylinkdrive.com/api/v0/product?slugName=PAC_USWHS002_WF_2",
+   "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "content-length": "2565"
+   },
+   "text": "{\"productDetails\":{\"_id\":\"6ae8d246b3ec590dbc2b0b07\",\"sequenceNumber\":2,\"enableId\":\"PAC-USWHS002-WF-2\",\"slugName\":\"PAC_USWHS002_WF_2\",\"name\":\"PAC-USWHS002-WF-2\",\"thumbnailUrl\":\"Website_JPG\\\\10005\\\\PAC-USWHS002-WF-2_1.jpg\",\"mldDescription\":\"Wireless Interface for kumo cloud®\",\"quickNotes\":\" \",\"brandModelNumber\":\"PAC-USWHS002-WF-2\",\"__v\":0,\"created_at\":\"2026-11-02T18:11:19.293Z\",\"updated_at\":\"2026-11-02T18:11:19.293Z\",\"contextListing\":{\"Engineering\":{\"data\":[{\"name\":\"2017 Accessories/Controls Engineering Manual\",\"thumbnailUrl\":\"EngineeringManual.jpg\",\"srcUrl\":\"Original/10004\\\\2017_P-Series_Engineering_Manual_Accessories.pdf\"}]},\"Installation\":{\"data\":[{\"name\":\"Installation Manual\",\"thumbnailUrl\":\"InstallManual.jpg\",\"srcUrl\":\"Original/10006\\\\PAC-USWHS002-WF-2_Install_Manual.pdf\"}]},\"Applications\":{\"data\":[{\"name\":\"CITY MULTI Controls Compatibility Chart\",\"thumbnailUrl\":\"Application_Guide.jpg\",\"srcUrl\":\"Original/10006\\\\M_CityMulti_Compatibility.pdf\"},{\"name\":\"M-Series Controls Compatibility Chart\",\"thumbnailUrl\":\"Application_Guide.jpg\",\"srcUrl\":\"Original/10006\\\\M_M-Series_Compatibility.pdf\"},{\"name\":\"P-Series Controls Compatibility Chart\",\"thumbnailUrl\":\"Application_Guide.jpg\",\"srcUrl\":\"Original/10006\\\\M_P-Series_Compatibility.pdf\"},{\"name\":\"WI2 and MHK1 Compatibility Charts\",\"thumbnailUrl\":\"Application_Guide.jpg\",\"srcUrl\":\"Original/10006\\\\2019-07 Wireless Interface 2 and MHK1.pdf\"}]},\"Operation\":{\"data\":[{\"name\":\"Owner Manual\",\"thumbnailUrl\":\"OperationManual.jpg\",\"srcUrl\":\"Original/10007\\\\kumo_cloud_2.22_owner_manual_ver.15_FINAL-2-updated.pdf\"},{\"name\":\"Technician Manual\",\"thumbnailUrl\":\"OperationManual.jpg\",\"srcUrl\":\"Original/10007\\\\kumo_cloud_2.22_technician_manual_ver.13_FINAL-2-update.pdf\"}]},\"Submittals\":{\"data\":[{\"name\":\"PAC-USWHS002-WF-2 Submittals\",\"thumbnailUrl\":\"Submittal.jpg\",\"srcUrl\":\"Original/10009\\\\M_Submittal_PAC-USWHS002-WF-2.pdf\"}]}}},\"breadCrumb\":[{\"name\":\"Controls\",\"codeDesc\":\"Controls\",\"enableId\":\"1000001429\",\"slugName\":\"Controls\",\"layout\":\"Horizontal\",\"slugUrl\":\"/Controls\"},{\"name\":\"kumo cloud\",\"codeDesc\":\"kumo cloud\",\"enableId\":\"17\",\"slugName\":\"kumo_cloud\",\"layout\":\"Horizontal\",\"slugUrl\":\"/Controls/kumo_cloud\"},{\"name\":\"kumo cloud Devices\",\"codeDesc\":\"kumo cloud Devices\",\"enableId\":\"20\",\"slugName\":\"kumo_cloud_Devices\",\"slugUrl\":\"/Controls/kumo_cloud\"},{\"name\":\"PAC-USWHS002-WF-2\",\"enableId\":\"PAC-USWHS002-WF-2\",\"slugName\":\"PAC_USWHS002_WF_2\",\"slugUrl\":\"/Controls/kumo_cloud/kumo_cloud_Devices/PAC_USWHS002_WF_2?product\",\"isProduct\":true}],\"S3_BASE_URL\":\"https://s3.amazonaws.com/enter.mehvac.com/DAMRoot\"}"
+  }
+ ]
+}

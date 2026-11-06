@@ -1,0 +1,30 @@
+name: Feature
+description: Suggest something new, such as another inventory to file manuals in.
+title: "Feature: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What you're trying to do
+      description: The problem, not only the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would help
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What you've tried instead
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: Project rules
+      description: Manual Beagle keeps a few rules whatever the feature (see CONTRIBUTING.md).
+      options:
+        - label: It works without AI (AI may only add to a rules-only path).
+          required: true
+        - label: It doesn't host, share or mirror manuals, crawl a site in bulk, or get around bot protection or logins.
+          required: true

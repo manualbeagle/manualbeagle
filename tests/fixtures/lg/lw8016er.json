@@ -1,0 +1,13 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.lg.com/us/support/product/lg-LW8016ER",
+   "status": 200,
+   "url": "https://www.lg.com/us/support/product/lg-LW8016ER",
+   "headers": {
+    "content-type": "text/html; charset=utf-8"
+   },
+   "text": "<html><script id=\"__NEXT_DATA__\" type=\"application/json\">{\"props\": {\"pageProps\": {\"manualData\": {\"customerModelCode\": \"LW8016ER\", \"csSalesCode\": \"LW8016ER.AT1AUSB\", \"manualList\": [{\"manualType\": \"USER\", \"fileType\": \"HTML2\", \"fileName\": \"Zb0jhC2XgKQ9nyVHbAQAvQ\", \"originalFileName\": \"MFL70960603.zip\", \"fileSize\": \"\", \"fileNamePrint\": \"English,Spanish\", \"releaseDate\": \"06/05/2024\"}, {\"manualType\": \"USER\", \"fileType\": \"ZIP2\", \"fileName\": \"Zb0jhC2XgKQ9nyVHbAQAvQ\", \"originalFileName\": \"MFL70960603.zip\", \"fileSize\": \"7,250K\", \"fileNamePrint\": \"English,Spanish\", \"releaseDate\": \"06/05/2024\"}, {\"manualType\": \"MANUAL\", \"fileType\": \"PDF\", \"fileName\": \"ul76ESZYtBGfR8ga777xdA\", \"originalFileName\": \"No_01._LW8016ER_EN.pdf\", \"fileSize\": \"5814K\", \"fileNamePrint\": \"English\", \"releaseDate\": \"10/31/2023\"}, {\"manualType\": \"MANUAL\", \"fileType\": \"PDF\", \"fileName\": \"qefZL1ar3EXUncXbjxYRg\", \"originalFileName\": \"No_01._LW8016ER_SP.pdf\", \"fileSize\": \"5796K\", \"fileNamePrint\": \"Spanish\", \"releaseDate\": \"10/31/2023\"}]}}}}</script></html>"
+  }
+ ]
+}

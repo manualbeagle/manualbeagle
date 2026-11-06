@@ -1,0 +1,14 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.tp-link.com/us/support/download/ep25p4/",
+   "status": 200,
+   "url": "https://www.tp-link.com/us/support/download/ep25p4/",
+   "headers": {
+    "content-type": "text/html; charset=UTF-8",
+    "content-length": "24920"
+   },
+   "text": "data-vars-event-category=\"Download-Datasheet_EP25P4\" href=\"/us/document/93462/\">EP25P4(US)_V2.6_Datasheet<\ndata-vars-event-category=\"Download-QuickInstallationGuide_EP25P4\" href=\"/us/document/127542/\">HomeKit Card (Plug/Switch)<\ndata-vars-event-category=\"Download-QuickInstallationGuide_EP25P4\" href=\"/us/document/92508/\">EP25P4(US)_V2.6_Quick Installation Guide<\ndata-vars-event-category=\"Download-UserGuide_EP25P4\" href=\"/us/document/92667/\">EP25P4(US)_V2.6_User Guide<\ndata-vars-event-category=\"Download-QuickInstallationGuide_EP25P4\" href=\"/us/document/41342/\">HomeKit Card<"
+  }
+ ]
+}

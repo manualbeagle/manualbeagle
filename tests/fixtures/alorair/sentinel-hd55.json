@@ -1,0 +1,13 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.alorair.com/product-details/alorair-sentinel-hd55",
+   "status": 200,
+   "url": "https://www.alorair.com/product-details/alorair-sentinel-hd55",
+   "headers": {
+    "content-type": "text/html; charset=UTF-8"
+   },
+   "text": "<span>Specification Sheet</span>\n                                                        <a href=\"https://www.alorair.com/pdf_files/product_guides/97/91jL+E19PDL.pdf\"\n<span>User Guide</span>\n                                                        <a href=\"https://www.alorair.com/pdf_files/product_guides/97/AlorAir-Sentinel-HD55S-User-Manual-20230810.pdf\""
+  }
+ ]
+}

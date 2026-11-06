@@ -1,0 +1,13 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.dewalt.com/product/dcs380p1",
+   "status": 200,
+   "url": "https://www.dewalt.com/en-us/product/dcs380p1/20v-max-cordless-reciprocating-saw-kit",
+   "headers": {
+    "content-type": "text/html; charset=utf-8"
+   },
+   "text": "https://assets.dewalt.com/GLOBALBOM/QU/DCS380P1/1/Instruction_Manual/EN/N236140_DCS380.pdf\nhttps://assets.dewalt.com/GLOBALBOM/QU/DCS380P1/1/Instruction_Manual/EN/N236140_DCS380.pdf"
+  }
+ ]
+}

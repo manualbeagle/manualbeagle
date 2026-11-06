@@ -1,0 +1,18 @@
+# Klein Tools. Link-only for now.
+# Product pages link instruction PDFs on data.kleintools.com, but the site's search runs in the browser and a page's address doesn't contain the model, so a lookup can't reach it. Web search of data.kleintools.com finds the PDF.
+# Last verified: 2026-11-03.
+brand: Klein Tools
+aliases: [Klein]
+domains: [kleintools.com, data.kleintools.com]
+status: link
+categories: [electrical testers, hand tools]
+manual_page: https://www.kleintools.com/search?search={model_q}
+notes: >-
+  Product pages link instruction PDFs on data.kleintools.com, but the site's search runs in the browser and a page's address doesn't contain the model, so a lookup can't reach it. Web search of data.kleintools.com finds the PDF.
+tests:
+  - model: CL900
+    skip: link-only adapter; web search does the finding (see notes)
+  - model: RT390
+    skip: link-only adapter; web search does the finding (see notes)
+  - model: VDV501-853
+    skip: link-only adapter; web search does the finding (see notes)

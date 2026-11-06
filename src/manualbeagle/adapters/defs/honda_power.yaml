@@ -1,0 +1,17 @@
+# Honda Power Equipment (US): generators, lawn mowers, pumps, tillers. Not Honda cars.
+# Site: powerequipment.honda.com/support/manuals. Every request from the tool got a 403 bot wall (2026-11-03),
+# which we don't get around, so a person opens the manuals page and web search fills in.
+# Last verified: 2026-11-03.
+brand: Honda Power Equipment
+aliases: [Honda Power, Honda Generator, Honda Generators]
+domains: [powerequipment.honda.com, honda.com]
+status: blocked
+categories: [generators, mowers, pumps]
+manual_page: https://powerequipment.honda.com/support/manuals
+notes: >-
+  powerequipment.honda.com answers automated requests with HTTP 403 (bot protection), 2026-11-03.
+  Falls back to web search. Brand "Honda" alone is left for cars, so use "Honda Power Equipment".
+tests:
+  - model: EU2200i
+    note: inverter generator
+    skip: site behind bot protection (403, 2026-11-03)

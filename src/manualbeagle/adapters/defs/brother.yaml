@@ -1,0 +1,20 @@
+# Brother (US). See adapters/py/brother.py for how it searches.
+brand: Brother
+aliases: [Brother USA, Brother International]
+domains: [brother.com, brother-usa.com, support.brother.com, download.brother.com]
+status: works
+categories: [printers, label makers, sewing machines]
+python: brother:Brother
+manual_page: https://support.brother.com/g/b/productsearch.aspx?c=us&lang=en&content=ml&q={model_q}
+notes: >-
+  brother-usa.com's support page gives Brother's product key; support.brother.com lists that product's PDFs.
+  The full user's guide is often online-only, so the quick setup guide may be the best PDF.
+tests:
+  - model: HL-L2460DW
+    note: mono laser printer
+    expect: {kind: quick_start, url_contains: download.brother.com, text_contains: HL-L2460DW}
+  - model: PT-P750W
+    note: label printer
+    expect: {min_results: 1, url_contains: download.brother.com}
+  - model: HL-L2395DW
+    expect: {min_results: 1}

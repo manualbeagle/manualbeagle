@@ -1,0 +1,47 @@
+# eufy (Anker Innovations).
+# Site: service.eufy.com, a Next.js support site. Its downloads search is a JSON API the page calls:
+#   POST /api/gcs/knowledge/tree with {brand: "Eufy", language: "en_US", recordType: "Download", keyword, area: "EN_US"}.
+#   The brand must be "Eufy" and the area "EN_US"; other values answer with no categories. The answer lists the same
+#   files under several categories; each has a title such as "X8 Hybrid_US_Manual" and a PDF on eufy's S3 bucket.
+# How it searches: the keyword matches titles, so the product name works ("X8 Hybrid") and the label's T-code mostly
+#   finds certificates (T2261 gives only declarations of conformity). "RoboVac " and "eufy " are taken off the front
+#   to make a variant. Other regions' and languages' copies and certificates are dropped by title, and so are
+#   titles where the model runs on into a longer name (G30 Edge, L35 Hybrid+).
+# Known gaps: a model typed only as its T-code finds no manual; titles name product lines ("X8 Hybrid"), so a PDF's
+#   text may not name the exact model; the US and "Others" English manuals tie; in underscore titles
+#   ("eufyCam_2C_Pro_manual") a longer name still matches the shorter model.
+# Last verified: 2026-11-03.
+brand: eufy
+aliases: [Eufy, eufy by Anker, Anker eufy, eufy Security, eufyHome]
+domains: [eufy.com, service.eufy.com, us.eufy.com, salesforce-knowledge-download.s3.us-west-2.amazonaws.com]
+status: works
+categories: [robot vacuums, security cameras, video doorbells, baby monitors, smart scales]
+model:
+  strip_suffix: ['(?i)^robovac\s+', '(?i)^eufy\s+']
+search:
+  - url: https://service.eufy.com/api/gcs/knowledge/tree
+    method: POST
+    json: {brand: Eufy, language: en_US, recordType: Download, keyword: "{model}", area: EN_US}
+    headers: {Accept: application/json}
+    format: json
+    results: $.data.categories[*].items[*]
+    fields: {url: $.downloadLink, title: $.title, kind: $.title}
+    keep_url: '\.pdf$'
+    # A manual or guide whose title has the model as a whole name: "G30" isn't "G30 Edge", nor "L35 Hybrid" "L35 Hybrid+".
+    keep_title: '^(?=.*(manual|guide))(.*[^A-Za-z0-9])?{model_re}(?=[\s]*([_/(]|user|manual|quick|guide|$))'
+    drop_title: '_(JP|CN|KR|DA|FI|NO|SV|DE|FR|ES|IT|NL|PL|PT|AR|EU)[_+]|declaration|\bDOC\b'
+kinds:
+  manual: owners_manual
+  quick start guide: quick_start
+  user guide: owners_manual
+manual_page: https://service.eufy.com/recommended?type=DownLoad&secondType=Manuals
+notes: >-
+  service.eufy.com's downloads search, by product name ("X8 Hybrid", not the label's T-code). Titles carry a region
+  (US, Others, EU); other languages' copies and certificates are dropped.
+tests:
+  - model: RoboVac X8 Hybrid
+    note: robot vacuum and mop (label model T2261)
+    expect: {kind: owners_manual, url_contains: salesforce-knowledge-download}
+  - model: Smart Scale P2 Pro
+    note: a smart scale (label model T9149)
+    expect: {kind: owners_manual, url_contains: salesforce-knowledge-download}

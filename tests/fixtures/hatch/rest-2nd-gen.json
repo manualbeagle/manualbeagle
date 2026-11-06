@@ -1,0 +1,31 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://help.hatch.co/api/v2/help_center/articles/search.json?category=23689912205719&per_page=25&query=manual",
+   "status": 200,
+   "url": "https://help.hatch.co/api/v2/help_center/articles/search.json?query=manual&category=23689912205719&per_page=25",
+   "headers": {
+    "content-type": "application/json; charset=utf-8"
+   },
+   "text": "{\"results\": [{\"title\": \"User Manual\", \"html_url\": \"https://help.hatch.co/hc/en-us/articles/24148076030615-User-Manual\", \"body\": \"<a href=\\\"https://help.hatch.co/hc/en-us/article_attachments/10155906559127\\\">Rest 2nd gen User Manual</a>\"}, {\"title\": \"Product Tour\", \"html_url\": \"https://help.hatch.co/hc/en-us/articles/24148031691031-Product-Tour\", \"body\": \"\"}, {\"title\": \"Lost Connection\", \"html_url\": \"https://help.hatch.co/hc/en-us/articles/10307348158231-Lost-Connection\", \"body\": \"\"}]}"
+  },
+  {
+   "key": "GET https://help.hatch.co/api/v2/help_center/en-us/articles/14668645947031.json",
+   "status": 200,
+   "url": "https://help.hatch.co/api/v2/help_center/en-us/articles/14668645947031.json",
+   "headers": {
+    "content-type": "application/json; charset=utf-8"
+   },
+   "text": "{\"article\": {\"html_url\": \"https://help.hatch.co/hc/en-us/articles/14668645947031-Quick-Start-Guides-for-all-Hatch-Products\", \"body\": \"<a href=\\\"https://assets.ctfassets.net/r946yuk5s8du/6iRdAb9b2oNrxyCXQaLby8/932e09ea7285a4148ca2635bf031a45c/qsg_rest.pdf\\\">Rest</a> <a href=\\\"https://downloads.ctfassets.net/r946yuk5s8du/1tOP3i60zLp5rqp5aQ9HVr/c8acbef208844c479be75d439553b5a5/qsg_rest2ndgen.pdf\\\">Rest 2nd gen</a> <a href=\\\"https://assets.ctfassets.net/r946yuk5s8du/53x6mStON4xtzhIKJfZVW2/c192d08a17a0a260ced634c268056c80/qsg_restplus.pdf\\\">Rest+</a> <a href=\\\"https://downloads.ctfassets.net/r946yuk5s8du/1c4A0eVHDh3qZHglpBvBHV/7ae4f60b015f1a98abd50704819b2717/qsg_restplus2ndgen.pdf\\\">Rest+ 2nd gen</a> <a href=\\\"https://www.dropbox.com/scl/fi/s6dkrs7twrqgs3gy2rlgd/Hatch-Baby-Digital-Guide-REV1.pdf?rlkey=kispez3506gvu1xc5cxuoxk47&amp;e=1&amp;dl=0\\\">Hatch Baby</a> <a href=\\\"https://www.dropbox.com/scl/fi/pa8xp96z472yd18r8mfw9/Hatch-Go-Digital-Guide-REV1.pdf?rlkey=usrcit3osjdgy8xjx7p05jdx0&amp;e=1&amp;dl=0\\\">Hatch Go</a> <a href=\\\"https://assets.ctfassets.net/r946yuk5s8du/4v25kNOcs9NnBwkXfhNCLP/8738940378097e35612688170a5ea6ce/qsg_restore.pdf\\\">Restore</a> <a href=\\\"https://assets.ctfassets.net/r946yuk5s8du/1Qsd2L0VIo7mSmbQrB8IG3/96d74573a61e2a173835f3a9aefd298f/qsg_restore2.pdf\\\">Restore 2</a> <a href=\\\"https://www.dropbox.com/scl/fi/kuar7p91s87vdztv2kne8/Restore-3-Digital-Guide-REV-1.pdf?rlkey=5r71yw0qvbo0wbst0gjwehr22&amp;e=2&amp;dl=0\\\">Restore 3</a> <a href=\\\"https://www.dropbox.com/scl/fi/bq5wxdh744fvh470manii/HSC-Digital-Guide-REV1.pdf?rlkey=1nv5aas0fe1zi1do1yxe7bv5q&amp;e=1&amp;dl=0\\\">Hatch Sleep Clock</a> <a href=\\\"https://downloads.ctfassets.net/r946yuk5s8du/3yEiWJWKDkL8cGbMY0DzVs/3727ad09a5f7a95b708924a09756d6c4/qsg_restmini.pdf\\\">Rest Mini</a> <a href=\\\"https://assets.ctfassets.net/r946yuk5s8du/3CaejFXZUVGhgD27WON3EM/03304284c243666b6c9b5a2a8ef3e30a/qsg_grow.pdf\\\">Grow</a>\"}}"
+  },
+  {
+   "key": "GET https://help.hatch.co/api/v2/help_center/en-us/categories.json?per_page=100",
+   "status": 200,
+   "url": "https://help.hatch.co/api/v2/help_center/en-us/categories.json?per_page=100",
+   "headers": {
+    "content-type": "application/json; charset=utf-8"
+   },
+   "text": "{\"categories\": [{\"id\": 4403132505751, \"name\": \"Your Guide to Hatch Devices\"}, {\"id\": 32589685176727, \"name\": \"Hatch Help Videos \"}, {\"id\": 10302931710999, \"name\": \"General\"}, {\"id\": 22668703376279, \"name\": \"Connecting to your Hatch\"}, {\"id\": 1500002248501, \"name\": \"Hatch+\"}, {\"id\": 202645928, \"name\": \"Orders, Shipping and Returns\"}, {\"id\": 14848226106007, \"name\": \"Hatch Go\"}, {\"id\": 31148144921623, \"name\": \"Hatch Baby \"}, {\"id\": 23689912205719, \"name\": \"Rest 2nd gen \"}, {\"id\": 10154979371287, \"name\": \"Rest+ 2nd gen\"}, {\"id\": 360002510274, \"name\": \"Rest+\"}, {\"id\": 360005864593, \"name\": \"Rest Mini\"}, {\"id\": 115000256508, \"name\": \"Rest\"}, {\"id\": 38973414645143, \"name\": \"Hatch Sleep Clock \"}, {\"id\": 28216687109911, \"name\": \"Restore 3 \"}, {\"id\": 9959426296343, \"name\": \"Restore 2\"}, {\"id\": 360003120554, \"name\": \"Restore\"}, {\"id\": 115000896847, \"name\": \"Grow\"}, {\"id\": 9386228386071, \"name\": \"Hatch Beta Community\"}]}"
+  }
+ ]
+}

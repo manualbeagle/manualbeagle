@@ -1,0 +1,14 @@
+# APC. Link-only for now.
+# Not yet written as a searching adapter; manuals are on download.schneider-electric.com, which web search finds.
+# Last verified: 2026-11-03.
+brand: APC
+aliases: [APC by Schneider Electric, American Power Conversion, Schneider Electric]
+domains: [apc.com, se.com, download.schneider-electric.com]
+status: link
+categories: [UPS, batteries]
+manual_page: https://www.apc.com/us/en/search/{model_path}/
+notes: >-
+  Not yet written as a searching adapter; manuals are on download.schneider-electric.com, which web search finds.
+tests:
+  - model: BX1500M
+    skip: link-only adapter; web search does the finding (see notes)

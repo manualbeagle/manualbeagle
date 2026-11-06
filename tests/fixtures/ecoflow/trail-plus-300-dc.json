@@ -1,0 +1,14 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://api-a.ecoflow.com/website/cms/downloadInfoForWeb/downloadInfo/v2?page=1&size=50&title=TRAIL+PLUS+300+DC",
+   "status": 200,
+   "url": "https://api-a.ecoflow.com/website/cms/downloadInfoForWeb/downloadInfo/v2?page=1&size=50&title=TRAIL+PLUS+300+DC",
+   "headers": {
+    "content-type": "application/json; charset=UTF-8",
+    "content-length": "576"
+   },
+   "text": "{\"code\": \"0\", \"data\": {\"content\": [{\"title\": \"EcoFlow TRAIL Plus 300 DC_User Manual\", \"fileUrl\": \"https://ecoflow-service-us-prod.oss-us-west-1.aliyuncs.com/cms/upload/1760349714697/EcoFlow%20Trail%20Plus%20300%20DC%20User%20Manual.pdf\", \"classify\": \"MANUAL\", \"lang\": \"en_US\", \"type\": 1, \"subType\": 1}]}}"
+  }
+ ]
+}

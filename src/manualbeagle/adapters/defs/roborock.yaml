@@ -1,0 +1,18 @@
+# Roborock. See adapters/py/roborock.py for how it searches.
+brand: Roborock
+aliases: [Roborock Technology]
+domains: [roborock.com, support.roborock.com, us.roborock.com]
+status: works
+categories: [robot vacuums, wet-dry vacuums]
+python: roborock:Roborock
+manual_page: https://support.roborock.com/hc/en-us/search?query={model_q}
+notes: >-
+  Roborock's help-centre search for "<model> manual", then each user-manual article's PDF attachments; US (FCC)
+  editions first. Models are product names (S8 MaxV Ultra, Q Revo).
+tests:
+  - model: S8 MaxV Ultra
+    note: robot vacuum with dock
+    expect: {kind: owners_manual, url_contains: support.roborock.com/hc/article_attachments, title_contains: S8 MaxV Ultra, text_contains: S8 MaxV Ultra}
+  - model: Q Revo
+    note: robot vacuum and mop
+    expect: {kind: owners_manual, title_contains: Qrevo FCC}

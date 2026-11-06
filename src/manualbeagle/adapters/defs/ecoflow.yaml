@@ -1,0 +1,21 @@
+# EcoFlow (US). See adapters/py/ecoflow.py for how it searches.
+brand: EcoFlow
+aliases: [Eco Flow, EF EcoFlow]
+domains: [ecoflow.com, manuals.ecoflow.com, websiteoss.ecoflow.com, ecoflow-service-us-prod.oss-us-west-1.aliyuncs.com]
+status: works
+categories: [portable power stations, solar generators, batteries, solar panels, portable coolers]
+python: ecoflow:EcoFlow
+manual_page: https://www.ecoflow.com/us/support/download/index
+notes: >-
+  The US download centre's document API, searched by product name (DELTA 2, RIVER 2, TRAIL Plus 300 DC); online
+  manuals are followed to their PDF. Label codes such as EFD330 aren't searchable.
+tests:
+  - model: DELTA 2
+    note: portable power station; its user manual is an online manual with a PDF
+    expect: {kind: owners_manual, url_contains: DELTA%202%20User%20Manual, text_contains: DELTA 2}
+  - model: TRAIL Plus 300 DC
+    note: DC power bank
+    expect: {kind: owners_manual, title_contains: TRAIL Plus 300 DC}
+  - model: RIVER 2
+    note: small power station; its user manual is online only (no PDF), offered as a page to open
+    expect: {kind: owners_manual, link_only: true}

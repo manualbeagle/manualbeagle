@@ -1,0 +1,30 @@
+# AlorAir (crawlspace and basement dehumidifiers, air scrubbers).
+# Site: www.alorair.com/product-details/alorair-<model as a slug> is the product page; its downloads list each
+# document as a label ("User Guide", "Specification Sheet") followed by a link to /pdf_files/product_guides/.
+# Known gaps: a model whose page slug isn't "alorair-" plus its name isn't found; the page is about 2 MB.
+# Last verified: 2026-11-03.
+brand: AlorAir
+aliases: [AlorAir Solutions, Alorair]
+domains: [alorair.com]
+status: works
+categories: [dehumidifiers, air scrubbers]
+manual_page: https://www.alorair.com/product-details/alorair-{model_slug}
+notes: >-
+  The product page's downloads (User Guide, Specification Sheet) under /pdf_files/product_guides/.
+search:
+  - url: https://www.alorair.com/product-details/alorair-{model_slug}
+    format: regex
+    results: '<span>\s*(?P<label>[^<]{3,60}?)\s*</span>\s*<a href="(?P<url>https://www\.alorair\.com/pdf_files/product_guides/[^"]+?\.pdf)"'
+    fields: {url: url, title: '=AlorAir {label}', kind: label}
+kinds:
+  User Guide: owners_manual
+  User Manual: owners_manual
+  Specification: spec_sheet
+  Installation: install_guide
+tests:
+  - model: Galaxy 60
+    note: Sentinel-style crawlspace dehumidifier
+    expect: {kind: owners_manual, url_contains: Galaxy-60-User-Manual}
+  - model: Sentinel HD55
+    note: crawlspace dehumidifier
+    expect: {url_contains: pdf_files/product_guides}

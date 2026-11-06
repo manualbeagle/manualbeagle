@@ -1,0 +1,13 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://products.geappliances.com/appliance/gea-specs/GTW465ASNWW",
+   "status": 200,
+   "url": "https://www.geappliances.com/appliance/GE-4-5-cu-ft-Capacity-Washer-with-Stainless-Steel-Basket-GTW465ASNWW",
+   "headers": {
+    "content-type": "text/html; charset=UTF-8"
+   },
+   "text": "Documents_1_Energy Guide\\\",\\\"value\\\":\\\"https://images.salsify.com/image/upload/s--0auGXxj5--/zt8fxqqbgeztj9j1umvm.pdf\nDocuments_2_Installation Instructions\\\",\\\"value\\\":\\\"https://images.salsify.com/image/upload/s--g83hPfT3--/5f52aba87a10fa97d6bc486bab773e518bab71ba.pdf\nDocuments_3_Quick Specs\\\",\\\"value\\\":\\\"https://images.salsify.com/image/upload/s--YC-gqVp0--/64f4d2683aa0d3f461f2f8ade2f4851c8badaa80.pdf\nDocuments_4_Use and Care Manual\\\",\\\"value\\\":\\\"https://images.salsify.com/image/upload/s--g83hPfT3--/5f52aba87a10fa97d6bc486bab773e518bab71ba.pdf"
+  }
+ ]
+}

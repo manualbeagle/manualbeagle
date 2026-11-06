@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+# local library, downloads and secrets
+/library/
+/cache/
+*.sqlite
+*.sqlite-journal
+.env
+
+# Claude Code: personal notes for this checkout
+CLAUDE.local.md

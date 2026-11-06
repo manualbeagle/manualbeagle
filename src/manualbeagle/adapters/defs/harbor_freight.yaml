@@ -1,0 +1,44 @@
+# Harbor Freight and its own brands (Bauer, Hercules, Predator, Pittsburgh, Central Machinery, Chicago Electric,
+# U.S. General, Icon, Badland, Daytona and others).
+# Site: manuals.harborfreight.com serves PDFs named by item number and UPC (manuals/56000-56999/<item>-<upc>.pdf),
+# so a URL can't be built from the item number alone. www.harborfreight.com, where the product pages link them,
+# answers automated requests with a 403 bot wall, which we don't get around.
+# So this adapter offers the product search page for a person, and web search (restricted to the manuals site)
+# finds the PDF.
+# Known gaps: everything above; use the five-digit item number from the receipt or box as the model.
+# Last verified: 2026-11-03.
+brand: Harbor Freight
+aliases:
+  - Harbor Freight Tools
+  - Bauer
+  - Hercules
+  - Predator
+  - Pittsburgh
+  - Pittsburgh Pro
+  - Central Machinery
+  - Central Pneumatic
+  - Chicago Electric
+  - U.S. General
+  - Icon
+  - Badland
+  - Daytona
+  - Drillmaster
+  - Warrior
+  - Fortress
+  - Earthquake
+  - Doyle
+  - Quinn
+  - Haul-Master
+  - Thunderbolt
+  - Admiral
+  - Bunker Hill Security
+  - Portland
+  - Vanguard
+domains: [harborfreight.com, manuals.harborfreight.com]
+status: link
+categories: [tools, generators, outdoor power equipment, shop equipment]
+manual_page: https://www.harborfreight.com/search?q={model_q}
+notes: >-
+  www.harborfreight.com sits behind a bot wall (HTTP 403 to automated requests, 2026-11-03), and
+  manuals.harborfreight.com names files by item number plus UPC. Falls back to web search of the manuals site.
+tests: []

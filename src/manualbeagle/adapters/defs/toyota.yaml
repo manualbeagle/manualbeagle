@@ -1,0 +1,30 @@
+# Toyota vehicles, US site. See adapters/py/toyota.py for how it searches.
+brand: Toyota
+aliases: [Toyota Motor, Toyota Motor North America]
+domains: [toyota.com, sipb.toyota.com, assetscs.toyota.com]
+status: works
+vehicle: true
+categories: [vehicles]
+python: toyota:Toyota
+manual_page: https://www.toyota.com/owners/warranty-owners-manuals/
+notes: >-
+  Needs the model year. Owner's, multimedia and warranty-and-maintenance manuals as PDFs.
+tests:
+  - model: Sienna
+    year: 2022
+    note: an all-hybrid Sienna (Toyota files it as "sienna hv")
+    expect: {kind: owners_manual, url_contains: sipb.toyota.com, text_contains: Sienna}
+  - model: bZ4X
+    year: 2023
+    note: compact electric SUV
+    expect: {kind: owners_manual, title_contains: "bZ4X Owner"}
+  - model: bZ
+    year: 2026
+    note: the 2026 model is called "bZ"
+    expect: {kind: owners_manual}
+  - model: RAV4 Hybrid
+    year: 2020
+    expect: {kind: owners_manual}
+  - model: Camry
+    year: 2019
+    expect: {kind: owners_manual}

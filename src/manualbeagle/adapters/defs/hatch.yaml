@@ -1,0 +1,25 @@
+# Hatch. See adapters/py/hatch.py for how it searches.
+brand: Hatch
+aliases: [Hatch Baby, Hatch Sleep]
+domains: [hatch.co, help.hatch.co, hatchbaby-public.s3-us-west-2.amazonaws.com, assets.ctfassets.net, downloads.ctfassets.net]
+status: works
+family_manuals: true  # the manuals name the product line (Rest, Restore), not each generation
+categories: [sound machines, sunrise alarm clocks, night lights, baby monitors]
+python: hatch:Hatch
+manual_page: https://help.hatch.co/hc/en-us/search?query={model_q}
+notes: >-
+  Hatch's help centre: the product's category (by its name, such as Restore 2 or Rest+ 2nd gen), its articles that
+  link PDFs, and the quick start guide index. Some products have only a quick start guide as a PDF.
+tests:
+  - model: Restore
+    note: original Restore sunrise alarm
+    expect: {kind: owners_manual, url_contains: Restore_InstructionManual, text_contains: Restore}
+  - model: Rest+
+    note: original Rest+ night light and sound machine (not the Rest)
+    expect: {kind: owners_manual, url_contains: Rest%2B_InstructionManual}
+  - model: Rest 2nd Gen
+    note: Rest 2nd gen sound machine
+    expect: {kind: owners_manual, url_contains: article_attachments}
+  - model: Restore 2
+    note: its manual article now has HTML guides only; the quick start guide is the PDF
+    expect: {kind: quick_start, url_contains: qsg_restore2}

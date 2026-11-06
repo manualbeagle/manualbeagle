@@ -1,0 +1,23 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.litter-robot.com/support/article/litter-robot-5-manual/",
+   "status": 200,
+   "url": "https://www.litter-robot.com/support/article/litter-robot-5-manual/",
+   "headers": {
+    "content-length": "21528",
+    "content-type": "text/html; charset=UTF-8"
+   },
+   "text": "href=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Manual.pdf\"\nhref=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Manual.pdf\"\nhref=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Manual-English-International.pdf\"\nhref=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Manual-English-International.pdf\"\nhref=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Manual-Dansk-Instruktionshandbog.pdf\"\nhref=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Manual-Deutsch-Bedienungsanleitung.pdf\"\nhref=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Manual-Espanol-Manual-de-instrucciones.pdf\"\nhref=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Manual-Francais-Manuel-d-instruction.pdf\"\nhref=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Manual-Italiano-Manuale-d-istruzioni.pdf\"\nhref=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Manual-Nederlands-Handleiding.pdf\"\nhref=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Manuell-norsk.pdf\"\nhref=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Manual-Portugues.pdf\"\nhref=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Manuaalinen-suomi.pdf\"\nhref=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Manuell-svenska.pdf\"\nhref=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Elliniko-encheiridio.pdf\"\nhref=\"https://litter-robot.com/manual_pdf/Litter-Robot-5-Manual-Korean.pdf\""
+  },
+  {
+   "key": "GET https://www.litter-robot.com/support/article/litter-robot-5-pro-manual/",
+   "status": 404,
+   "url": "https://www.litter-robot.com/support/article/litter-robot-5-pro-manual/",
+   "headers": {
+    "content-type": "text/html; charset=UTF-8"
+   },
+   "text": "<!doctype html>\n<html lang=\"en\">\n    <head >\n        <script>\n    var LOCALE = 'en\\u002DUS';\n    var BASE_URL = 'https\\u003A\\u002F\\u002Fwww.litter\\u002Drobot.com\\u002F';\n    var require = {\n        'baseUrl': 'https\\u003A\\u002F\\u002Fwww.litter\\u002Drobot.com\\u002Fstatic\\u002Fversion1793276347\\u002Ffrontend\\u002FLitterRobot\\u002Fdefault\\u002Fen_US'\n    };</script>        \n<script type='text/javascript'>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('consent', 'default', {\"ad_storage\":\"granted\",\"ad_user_data\":\"granted\",\"ad_personalization\":\"granted\",\"analytics_storage\":\"granted\",\"functionality_storage\":\"granted\",\"personalization_storage\":\"granted\",\"security_storage\":\"granted\",\"wait_for_update\":500});gtag('set', 'ads_data_redaction', true);window.consentDefaults = {\"ad_storage\":\"granted\",\"ad_user_data\":\"granted\",\"ad_personalization\":\"granted\",\"analytics_storage\":\"granted\",\"functionality_storage\":\"granted\",\"personalization_storage\":\"granted\",\"security_storage\":\"granted\",\"wait_for_update\":500};window.osanoInlineClassification = true;window.osanoExcludedScripts = [\"d2jjzw81hqbuqv.cloudfront.net\\/integration\\/talkable-4.5.min.js\",\"d2jjzw81hqbuqv.cloudfront.net\\/integration\\/clients\\/\"];</script>\n    <script type=\"text&#x2F;javascript\">   (function() {\n       const scriptUrl = \"https://cmp.osano.com/6or0aUKubFmp4Kto/7ad65776-1229-4c81-abf8-54a38934b966/osano.js\";\n       \n       // Get URL parameter & cookie value\n       const urlParams = new URLSearchParams(window.location.search);\n       const optOutParam = Boolean(urlParams.get('attOptOut') === '1');\n       \n       // If the user has opted out via URL param, set a session cookie\n       if(optOutParam) {\n           document.cookie = \"attOptOut=1; path=/\";\n       }\n       \n       // Check if the user has opted out.\n       const cookies = document.cookie.split('; ').reduce((acc, cookie) => {\n           const [key, value] = cookie.split('=');\n           acc[key] = value;\n           r"
+  }
+ ]
+}

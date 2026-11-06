@@ -1,0 +1,37 @@
+# PETKIT.
+# Site: petkit.com/pages/manual-downloads, one page listing every product's user manual: a picture and a link whose
+#   text is the product's name ("YumShare Dual-hopper 2"), to a PDF on instructions.petkit.com whose path carries the
+#   product code from the label ("D4sh-2/D4SH-2_User Manual_EN_V1.0_20251024.pdf").
+# How it searches: two passes over that page. The first keeps links whose text is the model as a whole name, so
+#   "YumShare Dual-hopper" isn't "YumShare Dual-hopper 2"; the second keeps links whose file name starts with the
+#   model as a code (D4SH-2, CT-W3).
+# Known gaps: the page fetched twice (once per pass); only the newest manual of each product is listed; a code
+#   written differently in the file name (D4-SH for D4SH) isn't matched.
+# Last verified: 2026-11-03.
+brand: PETKIT
+aliases: [Petkit, PetKit]
+domains: [petkit.com, instructions.petkit.com]
+status: works
+categories: [automatic pet feeders, water fountains, self-cleaning litter boxes, grooming kits]
+search:
+  - url: https://www.petkit.com/pages/manual-downloads
+    format: html
+    results: 'a[href*="instructions.petkit.com"]'
+    fields: {url: '@href', title: ., kind: =owners_manual}
+    keep_url: '\.pdf'
+    keep_title: '^(.*[^A-Za-z0-9])?{model_re}\s*$'
+  - url: https://www.petkit.com/pages/manual-downloads
+    format: html
+    results: 'a[href*="instructions.petkit.com"]'
+    fields: {url: '@href', title: ., kind: =owners_manual}
+    keep_url: '/{model_re}_[^/]*\.pdf'
+manual_page: https://www.petkit.com/pages/manual-downloads
+notes: >-
+  The manual-downloads page, matched on the product's name (YumShare Dual-hopper 2) or its label code (D4SH-2).
+tests:
+  - model: YumShare Dual-hopper 2
+    note: automatic feeder with two hoppers and a camera (label code D4SH-2)
+    expect: {kind: owners_manual, url_contains: D4SH-2}
+  - model: D4H-2
+    note: the YumShare Solo 2 feeder, by its label code
+    expect: {kind: owners_manual, url_contains: D4H-2_UserManual}

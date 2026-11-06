@@ -1,0 +1,14 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://www.tp-link.com/us/support/download/kp125m/",
+   "status": 200,
+   "url": "https://www.tp-link.com/us/support/download/kp125m/",
+   "headers": {
+    "content-type": "text/html; charset=UTF-8",
+    "content-length": "27500"
+   },
+   "text": "data-vars-event-category=\"Download-Datasheet_KP125M\" href=\"/us/document/20082/\">KP125M(US)_V1.6_Datasheet<\ndata-vars-event-category=\"Download-QuickInstallationGuide_KP125M\" href=\"/us/document/92507/\">Kasa Matter(US)_Quick Installation Guide<\ndata-vars-event-category=\"Download-ApplicationGuide_KP125M\" href=\"/us/document/91732/\">Kasa App Guide_Plug Series<\ndata-vars-event-category=\"Download-UserGuide_KP125M\" href=\"/us/document/90312/\">KP125M(US)_V1.6_User Guide<\ndata-vars-event-category=\"Download-QuickInstallationGuide_KP125M\" href=\"/us/document/90249/\">KP125M(US)_V1.6_Quick Installation Guide<"
+  }
+ ]
+}

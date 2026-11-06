@@ -1,0 +1,18 @@
+# ChargePoint (home and commercial EV chargers).
+# Site: support.chargepoint.com is a Zendesk help centre, but on 2026-11-03 it answered automated requests with
+# Cloudflare's "Edge IP Restricted" page (HTTP 403), and www.chargepoint.com's product pages answered 403 too, which
+# we don't get around. Web search finds copies of the Home Flex manual.
+# Last verified: 2026-11-03.
+brand: ChargePoint
+aliases: [ChargePoint Home, ChargePoint Home Flex]
+domains: [chargepoint.com, support.chargepoint.com]
+status: blocked
+categories: [EV chargers]
+manual_page: https://support.chargepoint.com/hc/en-us/search?query={model_q}
+notes: >-
+  The help centre and product pages answer automated requests with Cloudflare blocks (2026-11-03). Falls back to
+  web search; the help centre's search is offered as a link for a person to open.
+tests:
+  - model: CPH50
+    note: Home Flex
+    skip: site behind bot protection (Cloudflare, 2026-11-03)

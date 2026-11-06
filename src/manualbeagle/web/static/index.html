@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manual Beagle</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='3' y='1.5' width='10' height='13' rx='1.5' fill='%231f5fbf'/%3E%3Cpath d='M5.5 5h5M5.5 8h5M5.5 11h3' stroke='white' stroke-width='1.2'/%3E%3C/svg%3E">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/static/icons/icon-180.png">
+<meta name="theme-color" content="#1f5fbf">
+<link rel="stylesheet" href="/static/style.css">
+<script src="/static/app.js" defer></script>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="logo" aria-hidden="true">▤</span> Manual Beagle</div>
+  <nav aria-label="Sections">
+    <a href="#find" data-view="find">Find</a>
+    <a href="#library" data-view="library">Library</a>
+    <a href="#ask" data-view="ask">Ask</a>
+    <a href="#batch" data-view="batch">Batch</a>
+    <a href="#homebox" data-view="homebox">Homebox</a>
+    <a href="#maintenance" data-view="maintenance">Maintenance</a>
+    <a href="#settings" data-view="settings">Settings</a>
+  </nav>
+  <div id="status" class="status" aria-live="polite"></div>
+</header>
+
+<main>
+  <!-- Find: one brand and model through the pipeline. -->
+  <section id="view-find" class="view" hidden>
+    <h1>Find a manual</h1>
+    <p class="hint">The brand and model from the rating plate. Sites are asked one at a time with a pause between
+      requests, so a lookup can take a little while.</p>
+    <div class="scan-row">
+      <!-- capture opens the camera at once; the second input, without it, opens the photo library. -->
+      <label class="button scan"><span aria-hidden="true">▣</span> Scan a rating plate
+        <input id="scan-input" type="file" accept="image/*" capture="environment" class="visually-hidden scan-photo"></label>
+      <label class="button scan secondary"><span aria-hidden="true">▤</span> Choose a photo
+        <input id="scan-library" type="file" accept="image/*" class="visually-hidden scan-photo"></label>
+      <span class="hint">Photograph the plate, upright and close, or pick a photo you already took; you check what was read before anything is looked up.</span>
+    </div>
+    <div id="scan-out" aria-live="polite"></div>
+    <form id="find-form" class="row-form">
+      <label>Brand <input name="brand" required autocomplete="off" placeholder="LG"></label>
+      <label>Model <input name="model" required autocomplete="off" placeholder="WM5700HVA"></label>
+      <label class="narrow">Year <input name="year" inputmode="numeric" pattern="\d{4}" placeholder="vehicles"></label>
+      <label>Kind <select name="kind"><option value="">any</option></select></label>
+      <label>Web search
+        <select name="search">
+          <option value="auto">when adapters find nothing</option>
+          <option value="always">always</option>
+          <option value="never">never</option>
+        </select>
+      </label>
+      <button type="submit" class="primary">Find</button>
+    </form>
+    <div id="find-out" aria-live="polite"></div>
+  </section>
+
+  <!-- Library: per-page search and the document list. -->
+  <section id="view-library" class="view" hidden>
+    <h1>Library</h1>
+    <form id="search-form" class="row-form">
+      <label class="grow">Search every page
+        <input name="q" type="search" autocomplete="off" placeholder="door seal, filter, error code E5">
+      </label>
+      <label>Brand <select name="brand"><option value="">all</option></select></label>
+      <button type="submit" class="primary">Search</button>
+    </form>
+    <p class="hint">Words are matched with their endings (filter finds filters). Use quotes for a phrase,
+      <code>OR</code> for either word, and <code>filt*</code> for a prefix.</p>
+    <div id="search-out" aria-live="polite"></div>
+    <div id="paperless-out" aria-live="polite"></div>
+    <h2 id="photos-heading" hidden>Nameplate photos</h2>
+    <div id="photos-out"></div>
+    <h2 id="docs-heading">Documents</h2>
+    <label class="filter">Filter <input id="docs-filter" type="search" autocomplete="off" placeholder="brand, model or title"></label>
+    <div id="docs-out"></div>
+  </section>
+
+  <!-- Ask: a question answered from the library's own pages, each page it used cited and linked. -->
+  <section id="view-ask" class="view" hidden>
+    <h1>Ask your manuals</h1>
+    <p id="ask-hint" class="hint"></p>
+    <form id="ask-form">
+      <div class="row-form">
+        <label class="grow">Question
+          <input name="question" type="search" autocomplete="off" maxlength="500" required
+            placeholder="How do I clean the lint filter?">
+        </label>
+      </div>
+      <div class="row-form">
+        <label>Brand <select name="brand"><option value="">all</option></select></label>
+        <label>Manual <select name="document" class="pick-doc"><option value="">all manuals</option></select></label>
+        <button type="submit" class="primary">Ask</button>
+      </div>
+    </form>
+    <div id="ask-out" aria-live="polite"></div>
+  </section>
+
+  <!-- Reader: one document, a page at a time. -->
+  <section id="view-read" class="view" hidden>
+    <div id="read-out"></div>
+  </section>
+
+  <!-- Batch: a list of brands and models. -->
+  <section id="view-batch" class="view" hidden>
+    <h1>Batch</h1>
+    <p class="hint">A list of things you own: CSV with <code>brand</code> and <code>model</code> columns
+      (<code>name</code> optional), or YAML. The file is read here in the browser; only its text is sent to
+      Manual Beagle.</p>
+    <form id="batch-form">
+      <label class="block">List
+        <textarea name="text" rows="8" spellcheck="false" placeholder="name,brand,model&#10;Washer,LG,WM5700HVA&#10;Mini-split,Mitsubishi Electric,MSZ-FH12NA"></textarea>
+      </label>
+      <div class="row-form">
+        <label>Or a file <input name="file" type="file" accept=".csv,.yaml,.yml,.txt"></label>
+        <label>Format
+          <select name="format"><option value="auto">detect</option><option value="csv">CSV</option><option value="yaml">YAML</option></select>
+        </label>
+        <label class="narrow">Min score <input name="min_score" inputmode="numeric" value="60"></label>
+        <label class="check"><input name="fetch" type="checkbox"> Download into the library</label>
+        <button type="submit" class="primary">Run</button>
+      </div>
+    </form>
+    <div id="batch-out" aria-live="polite"></div>
+  </section>
+
+  <!-- Homebox: status and sync (a dry run first; writing needs a second click). -->
+  <section id="view-homebox" class="view" hidden>
+    <h1>Homebox</h1>
+    <div id="homebox-status" aria-live="polite"></div>
+    <h2>Sync</h2>
+    <p class="hint">For every item with a manufacturer and model but no manual: find it, download it into the
+      library and check its text. The dry run writes nothing to Homebox; you then choose to attach the results.</p>
+    <form id="sync-form" class="row-form">
+      <label>Only items named <input name="item" autocomplete="off" placeholder="all items"></label>
+      <label class="narrow">Min score <input name="min_score" inputmode="numeric" value="60"></label>
+      <label class="check"><input name="force" type="checkbox"> Also items with a manual</label>
+      <label class="check"><input name="links_only" type="checkbox"> Links only</label>
+      <label class="check"><input name="allow_search_links" type="checkbox"> Allow web-search links</label>
+      <button type="submit" class="primary">Dry run</button>
+    </form>
+    <div id="sync-out" aria-live="polite"></div>
+    <h2>Import from Home Assistant</h2>
+    <p class="hint">Reads Home Assistant's devices (it changes nothing there) and offers those Homebox doesn't have
+      as new items, each in its area as the location. Services such as the sun, helpers, disabled devices and a
+      second device of the same model are skipped. Nothing is added until you say so, one item or all of them.</p>
+    <p class="row-form"><button id="ha-read" type="button" class="primary">Read devices</button>
+      <label class="check"><input id="ha-skipped" type="checkbox"> Show skipped devices</label></p>
+    <div id="ha-out" aria-live="polite"></div>
+    <div id="ha-find-out" aria-live="polite"></div>
+  </section>
+
+  <!-- Maintenance: tasks with an interval read from the manuals; each is approved (filed in Homebox) or dismissed. -->
+  <section id="view-maintenance" class="view" hidden>
+    <h1>Maintenance</h1>
+    <p class="hint">Tasks with an interval read from the manuals in the library, such as “clean the filter every
+      2 weeks”, each with the page it came from. Nothing goes to Homebox until you add it: an added task becomes a
+      maintenance entry on its item for the date you choose, and Homebox reminds you that day. A dismissed task
+      isn't suggested again.</p>
+    <form id="maint-form" class="row-form">
+      <label class="check" id="maint-ai" hidden><input name="ai" type="checkbox"> Also ask <span class="mono" id="maint-ai-name"></span> (slower)</label>
+      <button type="submit" class="primary">Read the manuals</button>
+    </form>
+    <div id="maint-job" aria-live="polite"></div>
+    <div class="row-form">
+      <label>Show
+        <select id="maint-status">
+          <option value="new">● waiting for you</option>
+          <option value="filed">✓ added to Homebox</option>
+          <option value="dismissed">– dismissed</option>
+          <option value="all">all</option>
+        </select>
+      </label>
+      <span id="maint-counts" class="muted"></span>
+    </div>
+    <div id="maint-out" aria-live="polite"></div>
+  </section>
+
+  <!-- Settings: what the server uses, where each value comes from, and changes saved beside the library. -->
+  <section id="view-settings" class="view" hidden>
+    <h1>Settings</h1>
+    <p class="hint">A change here is saved beside the library and used at once; it wins over the config file.
+      <b>Use the file's value</b> takes a change away. API keys, and where the server reads them from, stay in the
+      config file or the server's environment.</p>
+    <form id="settings-form">
+      <div id="settings-fields" aria-live="polite"></div>
+      <p class="row-form"><button type="submit" class="primary">Save</button></p>
+    </form>
+    <div id="settings-out" aria-live="polite"></div>
+  </section>
+</main>
+
+<footer class="foot">
+  Runs on this computer and fetches for you alone. <a href="https://github.com/manualbeagle/manualbeagle" target="_blank" rel="noopener noreferrer">Manual Beagle</a>, Apache-2.0.
+  <a href="https://buymeacoffee.com/stevenstorie" target="_blank" rel="noopener noreferrer">☕ Support it</a>
+</footer>
+</body>
+</html>

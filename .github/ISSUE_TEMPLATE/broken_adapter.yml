@@ -1,0 +1,38 @@
+name: Broken adapter
+description: A brand that used to work finds the wrong manual or nothing at all.
+title: "Broken adapter: "
+labels: ["adapter: broken"]
+body:
+  - type: input
+    id: adapter
+    attributes:
+      label: Adapter id
+      description: From `manualbeagle adapters list` (the first column).
+      placeholder: lg
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model
+      placeholder: WM5700HVA
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output
+      description: The output of `manualbeagle find <brand> <model> --why` and, if you have a clone, `manualbeagle adapters test <id> --live -v`.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      description: The right manual's link, if you found it in a browser.
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: "`manualbeagle --version`, or `git rev-parse --short HEAD`."

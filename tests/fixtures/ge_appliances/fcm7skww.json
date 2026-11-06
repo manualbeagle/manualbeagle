@@ -1,0 +1,13 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://products.geappliances.com/appliance/gea-specs/FCM7SKWW",
+   "status": 200,
+   "url": "https://www.geappliances.com/appliance/GE-7-0-Cu-Ft-Manual-Defrost-Chest-Freezer-FCM7SKWW",
+   "headers": {
+    "content-type": "text/html; charset=UTF-8"
+   },
+   "text": "Documents_1_Energy Guide\\\",\\\"value\\\":\\\"https://images.salsify.com/image/upload/s---Wpc5Xy7--/2090eb6effeae787344078c2b143e00989604aca.pdf\nDocuments_2_Installation Instructions\\\",\\\"value\\\":\\\"https://images.salsify.com/image/upload/s--fcj52nDz--/2f9b9398f77cb3c2bac69146f5f5a31a76feecd4.pdf\nDocuments_3_Quick Specs\\\",\\\"value\\\":\\\"https://images.salsify.com/image/upload/s--ElRqtQJ2--/4e95645823822c60d2b1ec9ad5611a8ca6cafbcf.pdf\nDocuments_4_Use and Care Manual\\\",\\\"value\\\":\\\"https://images.salsify.com/image/upload/s--fcj52nDz--/2f9b9398f77cb3c2bac69146f5f5a31a76feecd4.pdf\nDocuments_5_Warranty\\\",\\\"value\\\":\\\"https://images.salsify.com/image/upload/s--lOax2V6l--/hmccnwwd0ogutkvqn890.pdf"
+  }
+ ]
+}

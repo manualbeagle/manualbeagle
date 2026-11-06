@@ -1,0 +1,25 @@
+# Mitsubishi Electric heating and cooling (US). See adapters/py/mitsubishi_electric.py.
+brand: Mitsubishi Electric
+aliases: [Mitsubishi, Mitsubishi Electric Trane, METUS, Mitsubishi Electric HVAC]
+domains: [mylinkdrive.com, mehvac.com, mitsubishicomfort.com]
+status: works
+categories: [mini-splits, heat pumps, air handlers, controllers]
+python: mitsubishi_electric:MitsubishiElectric
+manual_page: https://www.mylinkdrive.com/USA/search?value={model_q}
+notes: >-
+  MyLinkDrive's product API. Lists operation, installation, parts and service manuals and submittals.
+tests:
+  - model: MSZ-FH12NA
+    note: wall-mounted indoor unit, the design's example
+    expect: {kind: owners_manual, text_contains: MSZ-FH12NA}
+  - model: MUZ-FH12NA
+    note: its outdoor unit (MyLinkDrive files it as MUZ-FH12NA-1)
+    expect: {kind: owners_manual}
+  - model: MSZ-GL09NA
+    expect: {kind: owners_manual}
+  - model: MXZ-3C24NA2
+    note: multi-zone outdoor unit
+    expect: {kind: install_guide}
+  - model: PAC-USWHS002-WF-2
+    note: kumo cloud Wi-Fi interface for the mini-splits
+    expect: {min_results: 1}

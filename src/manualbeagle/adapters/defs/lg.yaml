@@ -1,0 +1,29 @@
+# LG Electronics, US site. See adapters/py/lg.py for how it searches.
+brand: LG
+aliases: [LG Electronics, LGE]
+domains: [lg.com, lge.com]
+status: works
+categories: [laundry, kitchen, air conditioning, water heaters, TVs, monitors]
+python: lg:LG
+model:
+  # WM5700HVA.ASSEVUS -> WM5700HVA (sales code -> customer model code)
+  strip_suffix: ['\.[A-Z]{5,8}$']
+manual_page: https://www.lg.com/us/support/product/lg-{model}
+notes: >-
+  Reads the support page's embedded data; PDFs come from LG's file service. US site only.
+tests:
+  - model: WM5700HVA
+    note: front-load washer
+    expect: {kind: owners_manual, url_contains: gscs-b2c.lge.com, text_contains: WM5700H}
+  - model: DLEX5500V
+    note: electric dryer
+    expect: {kind: owners_manual}
+  - model: WM5700HVA.ASSEVUS
+    note: a sales code with its market suffix
+    expect: {kind: owners_manual}
+  - model: LW8016ER
+    note: 8,000 BTU window AC (2019)
+    expect: {kind: owners_manual}
+  - model: 32U889SA-W
+    note: Smart Monitor Swing
+    expect: {kind: owners_manual}

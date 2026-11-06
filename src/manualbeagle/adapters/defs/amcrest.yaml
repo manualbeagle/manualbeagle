@@ -1,0 +1,21 @@
+# Amcrest. See adapters/py/amcrest.py for how it searches.
+brand: Amcrest
+aliases: [Amcrest Technologies, Amcrest Industries]
+domains: [amcrest.com, support.amcrest.com]
+status: works
+categories: [security cameras, video doorbells, NVRs, DVRs]
+python: amcrest:Amcrest
+manual_page: https://support.amcrest.com/hc/en-us/search?query={model_q}
+notes: >-
+  Amcrest's help-centre article search; manuals, quick start guides and spec sheets are Google Drive files linked
+  from articles that name the model. www.amcrest.com's product pages answer 403 and aren't used.
+model:
+  # Colour letter (EW white, EB black) and lens (-28MM, -40MM): Amcrest files manuals as IP8M-T2499E.
+  strip_suffix: ['(?<=\dE)[WB](-\d+MM)?$|-\d+MM$']
+tests:
+  - model: IP8M-T2499EW
+    note: 4K PoE turret camera
+    expect: {kind: owners_manual, title_contains: IP8M-T2499E, url_contains: drive.google.com}
+  - model: AD410
+    note: Wi-Fi video doorbell; Amcrest has no user manual for it, only guides and a spec sheet
+    expect: {kind: quick_start, title_contains: AD410, url_contains: drive.google.com}

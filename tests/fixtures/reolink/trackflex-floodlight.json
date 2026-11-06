@@ -1,0 +1,22 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://apis.reolink.com/v2/official-site-data-cache/common/navigate/search-bar/product/list?country=US&keyword=TRACKFLEX+FLOODLIGHT&lang=en&limit=8",
+   "status": 200,
+   "url": "https://apis.reolink.com/v2/official-site-data-cache/common/navigate/search-bar/product/list?lang=en&country=US&keyword=TRACKFLEX+FLOODLIGHT&limit=8",
+   "headers": {
+    "content-type": "application/json"
+   },
+   "text": "{\"items\": [{\"name\": \"TrackFlex Floodlight WiFi\", \"key\": \"trackflex-floodlight-wifi\"}]}"
+  },
+  {
+   "key": "GET https://support.reolink.com/c/trackflex-floodlight-wifi/",
+   "status": 200,
+   "url": "https://support.reolink.com/c/trackflex-floodlight-wifi/",
+   "headers": {
+    "content-type": "text/html; charset=utf-8"
+   },
+   "text": "\"title\":\"User Manual\",\"downloadUrl\":\"https://reolink.com/wp-content/assets/multiple-languages/manual/Reolink_Wireless_Camera_User_Manual.pdf?download_name=Reolink_Wireless_Camera_User_Manual.pdf\""
+  }
+ ]
+}
