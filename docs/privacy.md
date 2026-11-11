@@ -63,6 +63,15 @@ documents it looks for, and its upload's task. With `auto` on, every new manual 
 asking; nothing else in the library (the page index, photos, Homebox items) is sent. The token is read and bound
 to its address as Home Assistant's is.
 
+## Your Donetick
+
+Only if you configure `[donetick]`, set `[maintenance] target = "donetick"` and approve a maintenance suggestion
+on the web UI's Maintenance page. For each one you approve, Manual Beagle reads the token's user profile and
+labels, and makes one chore: the appliance's name and the task, the interval and first date, the label you set,
+and a description with a short quote from the manual, its title and page, and a link to that page in your web UI
+when it runs with `--public-url`. Nothing else in the library is sent. The token is read and bound to its address
+as Home Assistant's is.
+
 ## The web UI
 
 `manualbeagle serve --web` is a server on your own computer, listening on 127.0.0.1 unless you start it on
@@ -116,8 +125,8 @@ under their terms.
 
 Nothing in the library is uploaded anywhere except the PDFs `sync homebox` attaches to your own Homebox, the
 rating-plate photos you choose to attach with **Add to Homebox**, the manuals you file in your own
-Paperless-ngx, and the maintenance entries (a task, a date, and a quote from the manual) you approve for
-Homebox. To remove
+Paperless-ngx, and the maintenance entries or chores (a task, a date, and a quote from the manual) you approve
+for Homebox or Donetick. To remove
 everything, delete the library folder.
 
 ## Recorded fixtures

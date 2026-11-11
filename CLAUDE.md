@@ -27,7 +27,7 @@ src/manualbeagle/
   testing.py        the adapter test harness; scoreboard.py generates docs/brands.md
   adapters/         base.py (schema, Adapter), yaml_adapter.py, defs/*.yaml, py/*.py
   search/           web-search plugins (SearXNG)
-  sinks/            Homebox, the plain folder, seeding Homebox, Paperless-ngx
+  sinks/            Homebox, the plain folder, seeding Homebox, Paperless-ngx, Donetick (maintenance chores)
   sources/          Home Assistant (read only: devices to offer as Homebox items)
 tests/              pytest; tests/fixtures/<adapter>/<model>.json are recorded responses
 docs/               architecture, adapters (schema), brands (generated), integrations, privacy

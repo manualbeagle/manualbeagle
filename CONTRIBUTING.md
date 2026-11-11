@@ -309,7 +309,7 @@ maps every module and the main types; read the part you're changing first. Some 
 | Downloads, page text, OCR, the index | `library.py` | `manualbeagle fetch …`, `manualbeagle search "<words>"` |
 | The web UI and its HTTP API | `web/` | `manualbeagle serve --web --open` ([docs/web.md](docs/web.md)) |
 | The MCP server | `mcp_server.py` | `manualbeagle serve --mcp` ([docs/integrations/mcp.md](docs/integrations/mcp.md)) |
-| Homebox, Paperless-ngx, the folder sink, Home Assistant | `sinks/`, `sources/`, `sync.py` | each command's `--dry-run`, and the pages in [docs/integrations/](docs/integrations/) |
+| Homebox, Paperless-ngx, Donetick, the folder sink, Home Assistant | `sinks/`, `sources/`, `sync.py` | each command's `--dry-run`, and the pages in [docs/integrations/](docs/integrations/) |
 | A web-search engine, a sink or an AI provider | [Plugins](docs/architecture.md#plugins) in docs/architecture.md | a test with recorded or mocked responses (`respx`) |
 
 - **Tests come with behaviour changes.** Network calls in tests are recorded fixtures or `respx` mocks, never the

@@ -52,8 +52,9 @@ can add its own suggestion when asked.
 
 From the library, **maintenance suggestions** (`maintenance.py`) read each manual for tasks with an interval
 ("clean the filter every 2 weeks"), with the page and a quote, matched to the inventory's items. A person approves
-each one in the web UI before it becomes a scheduled maintenance entry in Homebox; suggestions and decisions are
-kept in the library's database so nothing is suggested twice.
+each one in the web UI before it becomes a scheduled maintenance entry in Homebox, or, with
+`[maintenance] target = "donetick"`, a Donetick chore that repeats on the task's interval; suggestions and decisions
+are kept in the library's database so nothing is suggested twice.
 
 ```mermaid
 flowchart LR
@@ -63,7 +64,8 @@ flowchart LR
   M -- no --> S["store<br/>maintenance table"]
   A --> S
   S --> P["a person approves<br/>web UI"]
-  P --> H["Homebox maintenance entry<br/>scheduled date"]
+  P -->|"target = homebox"| H["Homebox maintenance entry<br/>scheduled date, once"]
+  P -->|"target = donetick"| D["Donetick chore<br/>repeats on the interval"]
 ```
 
 ## The modules
@@ -81,11 +83,11 @@ flowchart LR
 | `nameplate.py` | Reads a rating plate photo, rules only: `ocr_image()` runs Tesseract twice (as a block and as sparse text), `read_plate()` finds the model and serial by their labels (`MODEL`, `M/N`, `MOD. NO.`, `S/N`, `SERIAL`, bilingual plates, a value on the next line), skips ratings such as `120V` or `R-410A`, offers unlabelled model-like words as guesses, and matches brands as whole words from `brand_names()` (adapters' brands and aliases, the shared aliases, `COMMON_BRANDS`). `image_type()` checks JPEG or PNG by content; `strip_metadata()` drops Exif, XMP, IPTC and PNG text chunks without re-encoding. |
 | `vision.py` | Optional vision models that read a plate photo when asked, on top of `nameplate.py`: `Ollama` (a model you run, default `gemma3`) and `Anthropic` (Claude through the Messages API, default `claude-opus-5-5`), chosen by the `[ai]` table, both through `PoliteClient`. `parse_answer()` takes the JSON object out of a model's reply. |
 | `ask.py` | Ask your manuals: `retrieve()` picks the best pages for a question (`keywords()`, `named_scope()`, `excerpt()`), `ask()` gives them to the text model and parses its citations (`cite()`). `Ollama` and `Anthropic` text models, chosen by the same `[ai]` table as `vision.py` (`make_model()`); `model_client()` is their `PoliteClient`. |
-| `sinks/` | Homebox (source and sink), the plain folder, `seed` for filling Homebox from a list, and Paperless-ngx (`paperless.py`): file each library manual with brand and model tags, after checking its checksum, and remember what was sent (`Ledger`, the `paperless` table). |
+| `sinks/` | Homebox (source and sink), the plain folder, `seed` for filling Homebox from a list, Paperless-ngx (`paperless.py`): file each library manual with brand and model tags, after checking its checksum, and remember what was sent (`Ledger`, the `paperless` table), and Donetick (`donetick.py`): a client that makes recurring chores (`interval_chore()`, `due_at()`) for approved maintenance. |
 | `sources/` | Where lists of things come from besides an inventory: Home Assistant (`homeassistant.py`), read only over its WebSocket API. `plan_import()` decides, for each device, new, already in Homebox, or skipped and why; `add_to_homebox()` writes what a person confirmed. |
 | `newitem.py` | Add to Homebox from a rating-plate scan: `preview()` reads Homebox only (a suggested name from the brand, `product_kind()` and the model; the locations; `matches()`, items with the same maker and model number by `same_item()`), and `add()` writes what the person confirmed, a step at a time: the item (or an existing one), its serial (a GET then PUT, since Homebox's create takes none), the plate photo, then the manual through `sync.plan_item` and `sync.attach`. |
 | `sync.py` | `sync homebox`: for each item with a maker and model but no manual, upload the PDF if its text names the model (or, for an adapter's own result, names a related model such as a longer SKU, or the adapter sets `family_manuals` because the maker's manuals cover a range), else upload a manual an earlier run put in the library for the same brand and model whose text names it, else attach a link. A link must be http(s) and the maker's own (an adapter's result or a URL on its domains) unless `--allow-search-links`; titles go in as plain text. `--dry-run` writes nothing to Homebox; `--metrics FILE` writes the outcome as a Prometheus textfile (`write_metrics()`), for a nightly run. |
-| `maintenance.py` | Maintenance suggestions read from manuals. `rules_for_page()` finds a maintenance verb with an interval (a week to ten years) in a sentence, a bullet under a part's name, under an interval heading ("EVERY MONTH"), in a frequency table or a schedule row, and keeps the page and a quote. With `[ai]`, `ai_for_page()` asks the model about pages with an interval and keeps its answer only when the quote is on the page and the interval is one the page states; it may reword or add, never remove. `match_items()` ties a document to inventory items by brand alias and model. `Store` keeps suggestions and decisions in the library's `maintenance` table (one per item, task and interval, so nothing is suggested twice); `file_in_homebox()` adds an approved one to Homebox as a scheduled maintenance entry. Only the web UI's approve button calls it. |
+| `maintenance.py` | Maintenance suggestions read from manuals. `rules_for_page()` finds a maintenance verb with an interval (a week to ten years) in a sentence, a bullet under a part's name, under an interval heading ("EVERY MONTH"), in a frequency table or a schedule row, and keeps the page and a quote. With `[ai]`, `ai_for_page()` asks the model about pages with an interval and keeps its answer only when the quote is on the page and the interval is one the page states; it may reword or add, never remove. `match_items()` ties a document to inventory items by brand alias and model. `Store` keeps suggestions and decisions in the library's `maintenance` table (one per item, task and interval, so nothing is suggested twice); `file_in_homebox()` adds an approved one to Homebox as a scheduled maintenance entry, and `file_in_donetick()` makes it a Donetick chore named for the appliance that repeats on its interval (`[maintenance] target` picks one; `Store.filed()` records which, `filed_in`). Only the web UI's approve button calls them. |
 | `batch.py` | `batch FILE`: the best manual for every row of a YAML or CSV list of brand and model, for people with no inventory app, with a JSON report. `--fetch` downloads each one into the library with `sync`'s rule (a PDF whose text names the model, else the maker's link) and prints coverage by brand. |
 | `mcp_server.py` | The MCP server over stdio, with read tools (including `ask_manuals` and `maintenance_suggestions`). Write tools only with `--allow-write`. |
 | `web/` | The web UI (`serve --web`): `app.py`, a Starlette app whose JSON API under `/api` calls `find`, `Library`, `ask`, `batch.look_up`, `sync.plan_item`/`attach`, `nameplate.read_plate` and `vision`; `jobs.py`, which runs batch and sync in a background thread, one at a time; `integrations.py`, the Home Assistant and Paperless-ngx endpoints and `PaperlessAuto`; and `static/`, one page of plain HTML, CSS and JavaScript, with a web app manifest, icons and a service worker so a phone can install it over HTTPS. Listens on 127.0.0.1 and answers only loopback Host names; changes must be same-origin JSON (a nameplate photo is the one image body); any other address, or `--public-url` behind a TLS proxy, needs a token. See [web.md](web.md). |
@@ -189,6 +191,18 @@ provider = "none"                # or "ollama" (your own) or "anthropic" (Claude
 model = ""                       # default: gemma3 for ollama, claude-opus-5-5 for anthropic
 url = ""                         # ollama's address (default http://localhost:11434)
 api_key_env = ""                 # anthropic: the variable holding the API key (default ANTHROPIC_API_KEY)
+
+[maintenance]
+target = "homebox"               # where an approved maintenance suggestion goes: "homebox" or "donetick"
+
+[donetick]                       # optional: approved maintenance as recurring chores (integrations/donetick.md)
+url = ""                         # such as http://donetick.local:2021
+token_env = "DONETICK_TOKEN"     # an API token from Donetick's Settings › API Tokens
+label = ""                       # a label the chores get, by name (it must exist in Donetick)
+due_time = "09:00"               # the time of day a chore falls due
+timezone = ""                    # such as "Europe/London"; empty: this computer's own
+rolling = false                  # true: the next date counts from when it's done
+notify = true                    # Donetick reminds the person when it falls due
 ```
 
 The library and its database live in `%LOCALAPPDATA%\manualbeagle` or `~/.local/share/manualbeagle` (or
@@ -196,23 +210,23 @@ The library and its database live in `%LOCALAPPDATA%\manualbeagle` or `~/.local/
 
 The web UI's Settings page saves its changes in `settings.json` in that same folder, and they win over the
 file. It can change the settings in `settings.SETTINGS` (the delay, robots.txt, web search, the Homebox address
-and links, Home Assistant's and Paperless-ngx's addresses, Paperless's `auto` and document type, and the AI
-model), never `home`, `adapter_dirs`, or where a key is read from (`token_env`, `token_file`, `token_command`,
+and links, Home Assistant's and Paperless-ngx's addresses, Paperless's `auto` and document type, where approved
+maintenance goes, Donetick's address and label, and the AI model), never `home`, `adapter_dirs`, or where a key is read from (`token_env`, `token_file`, `token_command`,
 `api_key_env`), so the page can't run a program, read a secret or move the library. Homebox's, Home
-Assistant's and Paperless's keys are also bound to the address set beside them in the file or the environment
+Assistant's, Paperless's and Donetick's keys are also bound to the address set beside them in the file or the environment
 (`TokenSource.bind_key`, called by `build()`): an address the page alone changed gets no key, so whoever can change
 settings can't send a key to their own server.
 
-Four environment variables override both (`config.ENV_OVERRIDES`): `MANUALBEAGLE_SEARXNG` (the SearXNG URL),
-`MANUALBEAGLE_HOMEBOX_URL`, `MANUALBEAGLE_HA_URL` and `MANUALBEAGLE_PAPERLESS_URL`. Secrets are never read from the file itself, only from the environment variable or
+Five environment variables override both (`config.ENV_OVERRIDES`): `MANUALBEAGLE_SEARXNG` (the SearXNG URL),
+`MANUALBEAGLE_HOMEBOX_URL`, `MANUALBEAGLE_HA_URL`, `MANUALBEAGLE_PAPERLESS_URL` and `MANUALBEAGLE_DONETICK_URL`. Secrets are never read from the file itself, only from the environment variable or
 file it names. The only private addresses the client will reach are the origins of `[search] url` and
 `[homebox] url`. With `provider = "ollama"`, the `[ai]` model's own client may also reach `[ai] url`; the clients
-for lookups and downloads, whose URLs come from web sites, may not. The Homebox, Home Assistant and Paperless
-clients talk only to their own configured address, with their own HTTP (or WebSocket) client rather than the
+for lookups and downloads, whose URLs come from web sites, may not. The Homebox, Home Assistant, Paperless and
+Donetick clients talk only to their own configured address, with their own HTTP (or WebSocket) client rather than the
 `PoliteClient`, since nothing they reach comes from a web site.
 
 Integrations have their own pages: [Homebox](integrations/homebox.md), [Home Assistant](integrations/homeassistant.md),
-[Paperless-ngx](integrations/paperless.md), [a plain folder](integrations/folder.md) and
+[Paperless-ngx](integrations/paperless.md), [Donetick](integrations/donetick.md), [a plain folder](integrations/folder.md) and
 [MCP for AI assistants](integrations/mcp.md). [privacy.md](privacy.md) lists what is sent where.
 
 ## Rules the code keeps
@@ -225,5 +239,6 @@ Integrations have their own pages: [Homebox](integrations/homebox.md), [Home Ass
   only with a token.
 - A rating plate photo is only read for suggestions; nothing is looked up until the person confirms the brand and
   model. Its metadata is stripped before it's kept.
-- A maintenance suggestion reaches Homebox only when a person clicks **Add to Homebox** for it. A model's
+- A maintenance suggestion reaches Homebox or Donetick only when a person clicks **Add to Homebox** (or **Add to
+  Donetick**) for it. A model's
   suggestion is kept only when its quote is on the page.

@@ -63,8 +63,8 @@ library.
 - **Maintenance:** tasks with an interval read from the manuals in the library, such as "clean the filter every
   2 weeks" or "replace the hoses every five years", for you to approve one at a time. See
   [Maintenance](#maintenance).
-- **Settings:** what the server uses, in six groups (lookups, web search, Homebox, Home Assistant,
-  Paperless-ngx, the AI model), each
+- **Settings:** what the server uses, in seven groups (lookups, web search, Homebox, Home Assistant,
+  Paperless-ngx, maintenance with Donetick, the AI model), each
   with where its value comes from: `✎ changed here`, `● config file`, `○ default`, or `▲ set by the server's
   environment` (locked here). **Save** keeps the changes in `settings.json` beside the library and uses them at
   once (not while a batch or sync runs); they win over config.toml, and **Use the file's value** takes one away.
@@ -113,7 +113,8 @@ answer is `manualbeagle ask "..."` on the command line and the `ask_manuals` too
 
 Manuals say how often to look after things: "clean the filter every two weeks", "test the safety reversal system
 every month", "replace the hoses every five years". The Maintenance page finds those and, when you approve one,
-adds it to the item in Homebox, whose notifier then reminds you on the day.
+adds it to the item in Homebox, whose notifier then reminds you on the day, or, with `[maintenance] target =
+"donetick"`, makes it a [Donetick](integrations/donetick.md) chore that repeats on the task's interval.
 
 1. **Read the manuals.** Every document in the library is read for a maintenance verb (clean, replace, check,
    test, descale, oil...) with an interval of a week to ten years: in a sentence, in a bullet under a part's name
@@ -127,8 +128,9 @@ adds it to the item in Homebox, whose notifier then reminds you on the day.
    on a small local model.
 3. **Decide.** Each suggestion shows the task, how often, the item it belongs to, and the manual's own words with
    a link to the page. Change the task's wording or the first date (default: one interval from today) if you
-   like, then **✓ Add to Homebox** or **✗ Dismiss**. A dismissed suggestion is never suggested again (**Undo**
-   brings it back). Nothing reaches Homebox without that click.
+   like, then **✓ Add to Homebox** (**✓ Add to Donetick**, with the appliance's name to put in front of the task,
+   when Donetick is the target) or **✗ Dismiss**. A dismissed suggestion is never suggested again (**Undo** brings
+   it back). Nothing reaches Homebox or Donetick without that click.
 
 Each document is matched to Homebox's items by brand (aliases count: Honeywell Home is Resideo) and model number
 (ignoring case, spaces and dashes). A suggestion for a model no item has is kept under its brand and model; you
@@ -137,7 +139,9 @@ again only adds what's new: suggestions and your decisions are kept in the libra
 table), one per item, task and interval.
 
 Homebox doesn't repeat maintenance entries. The entry's description says the interval, the manual and page, and
-the quote, so when you mark it done you know when the next one is due.
+the quote, so when you mark it done you know when the next one is due. A Donetick chore repeats by itself; its
+description says the same, with a link to the page when the UI runs with `--public-url`. **Approved maintenance
+goes to** on the Settings page switches between them; suggestions filed before keep saying where they went.
 
 `manualbeagle maintenance suggest [--ai]` reads the manuals from the command line and `manualbeagle maintenance
 list [--status new|filed|dismissed|all] [--json]` lists the suggestions; approving is done on this page.
@@ -315,10 +319,10 @@ status. POST bodies are JSON objects (`Content-Type: application/json`), except 
 | `POST /api/batch` | `{text, format: "auto"\|"csv"\|"yaml", fetch, min_score}` → a job (status 202). |
 | `POST /api/sync` | `{item?, force?, links_only?, allow_search_links?, min_score?}` → a dry-run job (202). |
 | `POST /api/jobs/{id}/attach` | `{}` → an attach job (202) that writes a finished dry run's uploads and links to Homebox. Once per dry run. |
-| `GET /api/maintenance?status=new\|filed\|dismissed\|all` | `{suggestions, counts: {new, filed, dismissed}, ai, homebox}`. Each suggestion: `id`, `task`, `every` (in words), `every_n` and `every_unit`, `interval` (as the manual said it), `sha256`, `title`, `page`, `quote`, `brand`, `model`, `item_id`, `item_name` (empty when no Homebox item matched), `source` (`rules`, `rules+<model>` when a model reworded it, or `<model>`), `status`, `first_date`, and once filed `scheduled` and `homebox_entry`; `error` says why Homebox last refused it. `ai` names the `[ai]` model, or is null. |
+| `GET /api/maintenance?status=new\|filed\|dismissed\|all` | `{suggestions, counts: {new, filed, dismissed}, ai, homebox, target, ready}`. Each suggestion: `id`, `task`, `every` (in words), `every_n` and `every_unit`, `interval` (as the manual said it), `sha256`, `title`, `page`, `quote`, `brand`, `model`, `item_id`, `item_name` (empty when no Homebox item matched), `source` (`rules`, `rules+<model>` when a model reworded it, or `<model>`), `status`, `first_date`, and once filed `scheduled`, `filed_in` (`homebox` or `donetick`) and `homebox_entry` or `donetick_chore`; `error` says why Homebox or Donetick last refused it. `ai` names the `[ai]` model, or is null. `target` is where an approval goes (`[maintenance] target`), `ready` whether it has an address. |
 | `POST /api/maintenance/suggest` | `{ai?}` → a `maintenance` job (202) that reads every document and keeps new suggestions. Its rows: `{sha256, brand, model, title, found, added, pages_asked, items, error}`. Reads Homebox's items to match them; writes nothing to Homebox. A `warning` says when Homebox didn't answer. |
 | `GET /api/maintenance/items` | Homebox's items (not locations), `[{id, name}]` by name, to choose one for a suggestion with none. |
-| `POST /api/maintenance/{id}/approve` | `{task?, scheduled?: "YYYY-MM-DD", item_id?}` → the suggestion, now `filed`: adds a maintenance entry to the Homebox item. 400 without an item, 409 when it was decided already, 502 when Homebox refuses (the suggestion stays waiting, with the `error`). |
+| `POST /api/maintenance/{id}/approve` | `{task?, scheduled?: "YYYY-MM-DD", item_id?, appliance?}` → the suggestion, now `filed`. With target `homebox`, adds a maintenance entry to the Homebox item; 400 without an item. With target `donetick`, makes a chore "\<appliance\>: \<task\>" that repeats on the suggestion's interval, first due on `scheduled` (`appliance` defaults to the item's name, else the brand and model; no item needed); 400 without Donetick's address or token. 409 when it was decided already, 502 when Homebox or Donetick refuses (the suggestion stays waiting, with the `error`). |
 | `POST /api/maintenance/{id}/dismiss` | `{}`: never suggest it again. `/reopen` undoes that. |
 | `GET /api/jobs` | Every job since the server started, without rows. |
 | `GET /api/jobs/{id}` | `{id, kind, state: running\|done\|failed\|cancelled, total, done, rows, summary, error}`. |
