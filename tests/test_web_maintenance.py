@@ -1,6 +1,7 @@
 """Maintenance suggestions through the web API, offline: Homebox and the model are faked, the library is real."""
 
 import datetime as dt
+import json
 import time
 
 import pytest
@@ -195,3 +196,109 @@ def test_suggest_with_the_model(cfg, monkeypatch):
         assert job["rows"][0]["pages_asked"] == 1 and "rules and ollama gemma3" in job["summary"]
         tasks = {s["task"]: s["source"] for s in client.get("/api/maintenance").json()["suggestions"]}
         assert tasks["Rinse the filter"] == "rules+ollama gemma3" and asked
+
+
+# The Donetick target: an approval makes a recurring chore instead of a Homebox entry.
+
+DT = "http://donetick.test:2021/api/v1"
+
+
+@pytest.fixture
+def dt_client(cfg, monkeypatch):
+    import respx
+
+    cfg.maintenance.target = "donetick"
+    cfg.donetick.url = "http://donetick.test:2021"
+    cfg.donetick.timezone = "America/New_York"
+    cfg.donetick.label = "House"
+    monkeypatch.setenv("DONETICK_TOKEN", "dt-token")
+    FakeHomebox.entries = []
+    monkeypatch.setattr(web, "homebox", lambda cfg: FakeHomebox())
+    with respx.mock(assert_all_called=False) as router:
+        router.get(f"{DT}/users/profile").respond(200, json={"res": {"id": 1, "username": "pat"}})
+        router.get(f"{DT}/labels").respond(200, json=[{"id": 2, "name": "House"}])
+        router.post(f"{DT}/chores/").respond(200, json={"res": 41})
+        app = web.create_app(cfg, http=FakeHTTP(b""), origins=["https://manuals.example"])
+        with TestClient(app, base_url=BASE) as tc:
+            yield tc, router
+
+
+def test_donetick_target_makes_a_recurring_chore(dt_client):
+    client, router = dt_client
+    suggest(client)
+    res = client.get("/api/maintenance").json()
+    assert res["target"] == "donetick" and res["ready"] is True
+    s = res["suggestions"][0]
+    r = client.post(
+        f"/api/maintenance/{s['id']}/approve", json={"task": "Clean the AC filter", "scheduled": "2026-11-20"}
+    )
+    assert r.status_code == 200, r.text
+    done = r.json()
+    assert done["status"] == "filed" and done["filed_in"] == "donetick" and done["donetick_chore"] == "41"
+    assert done["homebox_entry"] is None and FakeHomebox.entries == []  # nothing written to Homebox
+    chore = json.loads(router.calls.last.request.content)
+    assert router.calls.last.request.headers["secretkey"] == "dt-token"
+    assert chore["name"] == "Window AC: Clean the AC filter"  # the item's name is the appliance
+    assert chore["frequencyType"] == "interval" and chore["frequency"] == 2
+    assert chore["frequencyMetadata"]["unit"] == "weeks"
+    assert chore["nextDueDate"] == "2026-11-20T09:00:00-05:00" and chore["labelsV2"] == [{"id": 2}]
+    assert (
+        f"https://manuals.example/#read/{SHA}/{s['page']}" in chore["description"]
+    )  # a link to the page it came from
+    assert client.post(f"/api/maintenance/{s['id']}/approve", json={}).status_code == 409  # once only
+    filed = client.get("/api/maintenance?status=filed").json()["suggestions"]
+    assert [x["filed_in"] for x in filed] == ["donetick"]
+
+
+def test_donetick_needs_no_homebox_item(dt_client, cfg):
+    client, router = dt_client
+    lib = Library(cfg.library, cfg.db_path)
+    list(mt.suggest(lib, None))  # kept by brand and model, no item
+    lib.close()
+    s = client.get("/api/maintenance").json()["suggestions"][0]
+    r = client.post(f"/api/maintenance/{s['id']}/approve", json={"appliance": "Attic AC"})
+    assert r.status_code == 200, r.text
+    assert json.loads(router.calls.last.request.content)["name"].startswith("Attic AC: ")
+    s2 = client.get("/api/maintenance").json()["suggestions"][0]
+    client.post(f"/api/maintenance/{s2['id']}/approve", json={})
+    assert json.loads(router.calls.last.request.content)["name"].startswith("LG AC8000: ")  # brand and model
+
+
+def test_donetick_refusing_leaves_it_waiting(dt_client):
+    client, router = dt_client
+    router.post(f"{DT}/chores/").respond(400, json={"error": "Invalid request format"})
+    suggest(client)
+    s = client.get("/api/maintenance").json()["suggestions"][0]
+    r = client.post(f"/api/maintenance/{s['id']}/approve", json={})
+    assert r.status_code == 502 and "Donetick refused" in r.json()["error"]
+    again = client.get("/api/maintenance").json()["suggestions"][0]
+    assert again["status"] == "new" and "HTTP 400" in again["error"]
+
+
+def test_donetick_without_a_token_says_so(dt_client, monkeypatch):
+    client, router = dt_client
+    monkeypatch.delenv("DONETICK_TOKEN")
+    suggest(client)
+    s = client.get("/api/maintenance").json()["suggestions"][0]
+    r = client.post(f"/api/maintenance/{s['id']}/approve", json={})
+    assert r.status_code == 400 and "API token" in r.json()["error"]
+    assert not any(c.request.url.host == "donetick.test" for c in router.calls)
+
+
+def test_a_library_from_before_donetick_gets_the_new_columns(cfg):
+    lib = Library(cfg.library, cfg.db_path)
+    lib.db.execute("DROP TABLE IF EXISTS maintenance")
+    old = mt.SCHEMA.replace("    filed_in TEXT,\n    donetick_chore TEXT,\n", "")
+    assert "filed_in" not in old
+    lib.db.executescript(old)
+    lib.db.execute(
+        "INSERT INTO maintenance (subject, task_key, every_n, every_unit, task, interval_text, sha256, page, quote, "
+        "source, status, homebox_entry) VALUES ('I-ac', 'clean filter', 2, 'week', 'Clean the filter', "
+        "'every 2 weeks', ?, 2, 'q', 'rules', 'filed', 'E9')",
+        (SHA,),
+    )
+    lib.db.commit()
+    store = mt.Store(lib)
+    s = store.list("filed")[0]
+    assert s.homebox_entry == "E9" and s.public()["filed_in"] == "homebox"  # filed before: in Homebox
+    lib.close()

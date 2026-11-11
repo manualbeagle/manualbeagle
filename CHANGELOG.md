@@ -7,6 +7,19 @@ anything may change between minor versions.
 
 ## [Unreleased]
 
+### Added
+
+- **Approved maintenance can become a recurring Donetick chore:** with `[maintenance] target = "donetick"` and a
+  `[donetick]` table (address, and a token from an environment variable, file or command), **✓ Add to Donetick**
+  on the Maintenance page makes a [Donetick](https://donetick.com) chore named "\<appliance\>: \<task\>" that
+  repeats on the suggestion's interval, first due on the chosen date, assigned to the token's user, with an
+  optional label, due time, time zone, rolling schedule and reminder. No Homebox item is needed. Homebox stays the
+  default. The target, Donetick's address and its label are on the Settings page; the token is bound to the
+  address in the file or the environment, like the other keys. The library's `maintenance` table gains
+  `filed_in` and `donetick_chore` (added to an existing library by itself). See
+  [docs/integrations/donetick.md](docs/integrations/donetick.md).
+- **`tzdata` on Windows,** for the chores' time zones (Windows has no time zone database of its own).
+
 ## [0.1.0] - 2026-11-05
 
 The first release, on PyPI (`pip install manualbeagle`) and as the image `ghcr.io/manualbeagle/manualbeagle`.

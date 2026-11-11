@@ -110,7 +110,8 @@ The [Homebox guide](docs/integrations/homebox.md) explains what it uploads and w
 
 Manuals also say how often to clean, check or replace things. `manualbeagle maintenance suggest` reads them for
 those tasks (rules only; `--ai` asks an optional model too), and the web UI's **Maintenance** page lets you
-approve each one as a scheduled Homebox maintenance entry, with the page it came from.
+approve each one as a scheduled Homebox maintenance entry, or as a [Donetick](docs/integrations/donetick.md) chore
+that repeats on the task's interval, with the page it came from.
 
 ## Integrations
 
@@ -122,6 +123,7 @@ approve each one as a scheduled Homebox maintenance entry, with the page it came
 | AI assistants (MCP) | Find manuals, search and read them page by page; downloads only with `--allow-write`. | [mcp.md](docs/integrations/mcp.md) |
 | Home Assistant | Reads its devices (maker, model, name, area) to find their manuals and offer each as a new Homebox item in its area; read only, and nothing is added without a confirm. | [homeassistant.md](docs/integrations/homeassistant.md) |
 | Paperless-ngx | Files the library's manuals with brand and model tags and the Manual type, never twice; by hand or every new one. | [paperless.md](docs/integrations/paperless.md) |
+| Donetick | Makes each maintenance task you approve a chore that repeats on the manual's interval, instead of a one-off Homebox entry. | [donetick.md](docs/integrations/donetick.md) |
 | Grocy | Planned. | |
 
 ## Docs

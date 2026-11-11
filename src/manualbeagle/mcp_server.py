@@ -108,9 +108,9 @@ def build(cfg: Config, allow_write: bool = False):
     ) -> list[dict]:
         """Maintenance tasks read from the manuals, such as "clean the filter every 2 weeks". Read-only.
 
-        `status` is new (waiting for a person to approve), filed (approved and added to Homebox), dismissed, or
-        all. Each has the task, how often (`every`), the item, and the document, page and quote it came from:
-        cite them. A person approves suggestions in the web UI; this tool can't.
+        `status` is new (waiting for a person to approve), filed (approved and added to Homebox or Donetick),
+        dismissed, or all. Each has the task, how often (`every`), the item, and the document, page and quote it
+        came from: cite them. A person approves suggestions in the web UI; this tool can't.
         """
         from .maintenance import STATUSES, Store
 

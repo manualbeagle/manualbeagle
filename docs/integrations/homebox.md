@@ -204,6 +204,8 @@ Manuals say how often to clean, check or replace things. The web UI's **Maintena
 the library for those tasks and suggests them for the matching items; each one you approve becomes a Homebox
 maintenance entry with a scheduled date, and Homebox's notifier reminds you on that day (set up a notifier under
 your Homebox profile). The page and how suggestions are found are in [the web UI guide](../web.md#maintenance).
+To get repeating reminders instead, send approved tasks to [Donetick](donetick.md) (`[maintenance] target =
+"donetick"`); this section is about the default, Homebox.
 
 ```
 manualbeagle maintenance suggest            # read the manuals (rules only); --ai to ask the [ai] model too
