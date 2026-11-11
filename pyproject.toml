@@ -49,6 +49,7 @@ dependencies = [
     "pyyaml>=6.0",
     "pypdfium2>=4.30",
     "websockets>=13",  # Home Assistant's WebSocket API (its device registry has no REST endpoint)
+    "tzdata; sys_platform == 'win32'",  # time zones for Donetick chores; Windows has no system database
 ]
 
 [project.optional-dependencies]

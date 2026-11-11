@@ -6,7 +6,7 @@ what was changed on the Settings page, and wins over the file; the environment v
 
 Some settings are never editable here, so the page can't run a program, read a secret or move the library:
 `home`, `adapter_dirs`, every table's `token_env`, `token_file`, `token_command` and `token_command_env`
-(`[homebox]`, `[home_assistant]`, `[paperless]`), `[home_assistant] skip_integrations`, `[paperless] tags`, and
+(`[homebox]`, `[home_assistant]`, `[paperless]`, `[donetick]`), `[home_assistant] skip_integrations`, `[paperless] tags`, and
 `[ai] api_key_env`. They stay in config.toml.
 """
 
@@ -57,6 +57,12 @@ SETTINGS: tuple[Setting, ...] = (
             "Off: send them from the Library page.", "bool"),
     Setting("paperless.document_type", "Paperless document type", "Made in Paperless when it's missing; "
             "empty sets none.", "text"),
+    Setting("maintenance.target", "Approved maintenance goes to", "Homebox: a one-off maintenance entry on the "
+            "item. Donetick: a chore that repeats on the task's interval.", "choice", ("homebox", "donetick")),
+    Setting("donetick.url", "Donetick address", "Such as http://donetick.local:2021. Its API token stays in the "
+            "config file or the service's environment, and is sent only to the address set there.", "url"),
+    Setting("donetick.label", "Donetick label", "A label the chores get, by name; it must exist in Donetick. "
+            "Empty sets none.", "text"),
     Setting("ai.provider", "AI model (rating plates, Ask)", "Reads a plate photo beside OCR, and writes Ask's "
             "answers. Ollama runs on your own machine; Claude sends the photo, or the question and the pages' "
             "text, to Anthropic.", "choice", ("none", "ollama", "anthropic")),

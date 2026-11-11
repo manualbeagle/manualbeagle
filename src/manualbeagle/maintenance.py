@@ -1,4 +1,4 @@
-"""Maintenance suggestions read from manuals: tasks with an interval, approved by a person, filed in Homebox.
+"""Maintenance suggestions read from manuals: tasks with an interval, approved by a person, filed in Homebox or Donetick.
 
 How it works:
 
@@ -12,18 +12,22 @@ How it works:
    an interval on them, gives it the rules' findings to tidy, and keeps only answers whose quote is on the page
    and whose interval the page states. The model never removes a rule's finding.
 3. **A person decides.** Suggestions are kept in the library's database (`Store`), one per item, task and
-   interval, with the page and a quote. Each is approved (filed in Homebox) or dismissed in the web UI; either
-   way it's never suggested again.
-4. **Filed in Homebox.** `file_in_homebox()` adds a maintenance entry with a scheduled date to the item. Homebox
-   (v0.27) has no repeating entries, so the entry's description says the interval and where it came from.
+   interval, with the page and a quote. Each is approved (filed) or dismissed in the web UI; either way it's
+   never suggested again.
+4. **Filed where `[maintenance] target` says.** In Homebox (the default), `file_in_homebox()` adds a maintenance
+   entry with a scheduled date to the item. Homebox (v0.27) has no repeating entries, so the entry's description
+   says the interval and where it came from. In Donetick, `file_in_donetick()` makes a chore named for the
+   appliance that repeats on the suggestion's interval, first due on the chosen date.
 
-Nothing here writes to Homebox except `file_in_homebox()`, which only the web UI's approve button calls.
+Nothing here writes to Homebox or Donetick except `file_in_homebox()` and `file_in_donetick()`, which only the web
+UI's approve button calls.
 """
 
 from __future__ import annotations
 
 import calendar
 import datetime as dt
+import html
 import json
 import re
 import sqlite3
@@ -748,10 +752,15 @@ CREATE TABLE IF NOT EXISTS maintenance (
     error TEXT,
     found_at REAL,
     decided_at REAL,
+    filed_in TEXT,
+    donetick_chore TEXT,
     UNIQUE (subject, task_key, every_n, every_unit)
 );
 """
 STATUSES = ("new", "filed", "dismissed")
+TARGETS = ("homebox", "donetick")
+# Columns added after the table was first made, for libraries made before them.
+ADDED_COLUMNS = {"filed_in": "TEXT", "donetick_chore": "TEXT"}
 
 
 @dataclass
@@ -779,6 +788,8 @@ class Suggestion:
     decided_at: float | None = None
     title: str = ""
     kind: str = ""
+    filed_in: str | None = None  # homebox | donetick, once filed (None for one filed before Donetick existed)
+    donetick_chore: str | None = None
 
     @property
     def every(self) -> Interval:
@@ -794,6 +805,8 @@ class Suggestion:
         d = asdict(self)
         d["every"] = self.every.label
         d["first_date"] = self.first_date().isoformat()
+        if self.status == "filed" and not self.filed_in:
+            d["filed_in"] = "homebox"
         return d
 
 
@@ -819,6 +832,11 @@ class Store:
         self.lib = lib
         self.db = lib.db
         self.db.executescript(SCHEMA)
+        have = {row[1] for row in self.db.execute("PRAGMA table_info(maintenance)")}
+        for column, kind in ADDED_COLUMNS.items():
+            if column not in have:
+                self.db.execute(f"ALTER TABLE maintenance ADD COLUMN {column} {kind}")
+        self.db.commit()
 
     def add(self, f: Found, sha: str, brand: str, model: str, item_id: str = "", item_name: str = "") -> bool:
         """Keep a finding for an item (or, with no item, for the brand and model). False when it was known.
@@ -888,7 +906,7 @@ class Store:
         sql = (
             "SELECT m.id, m.task, m.interval_text, m.every_n, m.every_unit, m.sha256, m.page, m.quote, m.brand, "
             "m.model, m.item_id, m.item_name, m.source, m.status, m.scheduled, m.homebox_entry, m.error, "
-            "m.found_at, m.decided_at, coalesce(d.title, ''), coalesce(d.kind, '') "
+            "m.found_at, m.decided_at, coalesce(d.title, ''), coalesce(d.kind, ''), m.filed_in, m.donetick_chore "
             "FROM maintenance m LEFT JOIN documents d ON d.sha256 = m.sha256 WHERE 1=1"
         )
         args: list = []
@@ -935,12 +953,24 @@ class Store:
         self.db.commit()
         return cur.rowcount > 0
 
-    def filed(self, sid: int, task: str, item_id: str, item_name: str, scheduled: str, entry: str) -> None:
-        """Record that a suggestion was approved and filed in Homebox as `entry`."""
+    def filed(
+        self,
+        sid: int,
+        task: str,
+        item_id: str,
+        item_name: str,
+        scheduled: str,
+        entry: str,
+        target: str = "homebox",
+    ) -> None:
+        """Record that a suggestion was approved and filed in `target`: Homebox's entry or Donetick's chore `entry`."""
+        if target not in TARGETS:
+            raise ValueError(f"target must be one of {', '.join(TARGETS)}")
+        column = "homebox_entry" if target == "homebox" else "donetick_chore"
         self.db.execute(
-            "UPDATE maintenance SET status='filed', task=?, item_id=?, item_name=?, scheduled=?, homebox_entry=?, "
-            "error=NULL, decided_at=? WHERE id=?",
-            (task, item_id, item_name, scheduled, entry, time.time(), sid),
+            f"UPDATE maintenance SET status='filed', task=?, item_id=?, item_name=?, scheduled=?, {column}=?, "
+            "filed_in=?, error=NULL, decided_at=? WHERE id=?",
+            (task, item_id, item_name, scheduled, entry, target, time.time(), sid),
         )
         self.db.commit()
 
@@ -1043,3 +1073,54 @@ def file_in_homebox(hb: Any, s: Suggestion, item_id: str, task: str, scheduled: 
     """
     entry = hb.add_maintenance(item_id, task[:255], description(s), scheduled.isoformat())
     return str((entry or {}).get("id") or "")
+
+
+# Filing in Donetick
+
+
+def chore_description(s: Suggestion, link: str = "") -> str:
+    """The Donetick chore's description (HTML, as Donetick keeps it): the interval, where it was read, the quote.
+
+    `link`, when given, is the web UI's address of the page the task was read on.
+    """
+    doc = html.escape(s.title or f"{s.brand} {s.model} manual")
+    page = f'<a href="{html.escape(link)}">page {s.page}</a>' if link else f"page {s.page}"
+    return (
+        f"<p>Repeat {html.escape(s.every.label)}. From {doc} ({html.escape(f'{s.brand} {s.model}')}), {page}: "
+        f"“{html.escape(s.quote)}”</p><p>Suggested by Manual Beagle and approved by a person.</p>"
+    )[:5000]
+
+
+def chore_name(appliance: str, task: str) -> str:
+    """The chore's name: the appliance, then the task ("Window AC: Clean the filter")."""
+    appliance, task = _squash(appliance), _squash(task)
+    return f"{appliance}: {task}"[:255] if appliance else task[:255]
+
+
+def file_in_donetick(
+    client: Any, s: Suggestion, appliance: str, task: str, first: dt.date, cfg: Any, link: str = ""
+) -> str:
+    """Make an approved suggestion a Donetick chore that repeats on its interval; returns the chore's id.
+
+    `client` is a `sinks.donetick.Donetick`, `cfg` the `[donetick]` table (label, due time, time zone, rolling,
+    notify). The chore is named for the appliance, first due on `first` at the due time, and assigned to the
+    token's user. Raises DonetickError when Donetick refuses.
+    """
+    from .sinks.donetick import due_at, interval_chore
+
+    when = due_at(first, cfg.due_time, cfg.timezone)
+    user = client.me()
+    label = client.label_id(cfg.label) if cfg.label else None
+    chore = interval_chore(
+        chore_name(appliance, task),
+        s.every_n,
+        s.every_unit,
+        when,
+        chore_description(s, link),
+        int(user["id"]),
+        timezone=cfg.timezone,
+        label_id=label,
+        rolling=cfg.rolling,
+        notify=cfg.notify,
+    )
+    return str(client.create_chore(chore))

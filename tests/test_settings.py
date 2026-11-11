@@ -155,3 +155,25 @@ def test_the_homebox_key_is_bound_too(monkeypatch):
     )
     with pytest.raises(HomeboxError, match="only sent to"):
         homebox(build(file_data, {"homebox.url": "http://elsewhere.test:7745"}))
+
+
+def test_the_donetick_key_is_bound_too(monkeypatch):
+    from manualbeagle.config import build
+    from manualbeagle.sinks.donetick import DonetickError
+    from manualbeagle.sinks.donetick import from_config as donetick
+
+    monkeypatch.setenv("DONETICK_TOKEN", "k")
+    monkeypatch.delenv("MANUALBEAGLE_DONETICK_URL", raising=False)
+    file_data = {"donetick": {"url": "http://donetick.test:2021"}, "maintenance": {"target": "donetick"}}
+    assert donetick(build(file_data, {})).base == "http://donetick.test:2021/api/v1"
+    with pytest.raises(DonetickError, match="only sent to"):
+        donetick(build(file_data, {"donetick.url": "http://elsewhere.test:2021"}))
+    # The target and the label may change on the page; the token's source may not.
+    cfg = build(file_data, {"maintenance.target": "homebox", "donetick.label": "House"})
+    assert cfg.maintenance.target == "homebox" and cfg.donetick.label == "House"
+    with pytest.raises(ValueError):
+        settings.check("maintenance.target", "todoist")
+    with pytest.raises(ValueError):
+        settings.check("donetick.token_file", "/etc/shadow")
+    with pytest.raises(ValueError):
+        build({"maintenance": {"target": "todoist"}}, {})

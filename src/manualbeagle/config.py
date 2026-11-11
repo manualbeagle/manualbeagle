@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tomllib
 from pathlib import Path
+from typing import Literal
 
 from pydantic import BaseModel, Field, PrivateAttr
 
@@ -109,6 +110,29 @@ class PaperlessConfig(TokenSource):
     tags: list[str] = Field(default_factory=lambda: ["manual"])  # besides the brand and model tags
 
 
+class DonetickConfig(TokenSource):
+    """The `[donetick]` table: a Donetick to make recurring chores in, and where to read its API token.
+
+    Used when `[maintenance] target = "donetick"`: each approved maintenance suggestion becomes a chore that
+    repeats on the suggestion's interval, assigned to the token's user.
+    """
+
+    url: str = ""
+    token_env: str = "DONETICK_TOKEN"
+    label: str = ""  # a label the chores get, by name; it must exist in Donetick. Empty: none
+    due_time: str = "09:00"  # the time of day a chore falls due
+    timezone: str = ""  # an IANA time zone such as "Europe/London"; empty: this computer's own
+    rolling: bool = False  # true: the next date counts from when it's done, not from when it was due
+    notify: bool = True  # Donetick reminds the person when the chore falls due
+
+
+class MaintenanceConfig(BaseModel):
+    """The `[maintenance]` table: where an approved maintenance suggestion goes."""
+
+    # homebox: a one-off maintenance entry on the Homebox item. donetick: a Donetick chore that repeats.
+    target: Literal["homebox", "donetick"] = "homebox"
+
+
 class AIConfig(BaseModel):
     """The `[ai]` table, for optional AI plugins. Nothing requires it; the default is no AI.
 
@@ -134,6 +158,8 @@ class Config(BaseModel):
     homebox: HomeboxConfig = Field(default_factory=HomeboxConfig)
     home_assistant: HomeAssistantConfig = Field(default_factory=HomeAssistantConfig)
     paperless: PaperlessConfig = Field(default_factory=PaperlessConfig)
+    donetick: DonetickConfig = Field(default_factory=DonetickConfig)
+    maintenance: MaintenanceConfig = Field(default_factory=MaintenanceConfig)
     ai: AIConfig = Field(default_factory=AIConfig)
 
     @property
@@ -173,11 +199,12 @@ ENV_OVERRIDES = {
     "homebox.url": "MANUALBEAGLE_HOMEBOX_URL",
     "home_assistant.url": "MANUALBEAGLE_HA_URL",
     "paperless.url": "MANUALBEAGLE_PAPERLESS_URL",
+    "donetick.url": "MANUALBEAGLE_DONETICK_URL",
 }
 
 
 # Tables whose key goes only to the address set beside it (`TokenSource.bind_key`).
-KEY_BOUND = ("homebox", "home_assistant", "paperless")
+KEY_BOUND = ("homebox", "home_assistant", "paperless", "donetick")
 
 
 def read_file(path: Path | None = None) -> dict:
