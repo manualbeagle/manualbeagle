@@ -325,7 +325,8 @@ def cmd_homebox(args: argparse.Namespace, cfg: Config) -> int:
 def cmd_maintenance(args: argparse.Namespace, cfg: Config) -> int:
     """`manualbeagle maintenance suggest | list`: read manuals for maintenance tasks, or list the suggestions.
 
-    Approving a suggestion (filing it in Homebox) is done by a person on the web UI's Maintenance page.
+    Approving a suggestion (filing it in Homebox or Donetick, `[maintenance] target`) is done by a person on the web
+    UI's Maintenance page.
     """
     from . import maintenance as mt
     from .library import Library
@@ -344,7 +345,7 @@ def cmd_maintenance(args: argparse.Namespace, cfg: Config) -> int:
                 _out(f"{glyph[s.status]:<11} #{s.id:<4} {who}: {s.task}, {s.every.label}")
                 _out(f"            {s.title or s.brand + ' ' + s.model}, page {s.page}: “{s.quote}”")
             n = store.counts()
-            _out(f"\n● {n['new']} waiting, ✓ {n['filed']} filed in Homebox, – {n['dismissed']} dismissed")
+            _out(f"\n● {n['new']} waiting, ✓ {n['filed']} filed, – {n['dismissed']} dismissed")
             return 0
         items, ask, label = None, None, ""
         if cfg.homebox.url and not args.no_homebox:

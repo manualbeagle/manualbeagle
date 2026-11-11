@@ -1089,12 +1089,14 @@ function paperlessButton(sha) {
   return el("span", {}, b, out);
 }
 
-// --- Maintenance: suggestions read from the manuals, each approved (filed in Homebox) or dismissed here.
+// --- Maintenance: suggestions read from the manuals, each approved (filed in Homebox or Donetick) or dismissed.
 
 const MAINT_STATE = {
-  new: ["warn", "● waiting"], filed: ["ok", "✓ in Homebox"], dismissed: ["none", "– dismissed"],
+  new: ["warn", "● waiting"], filed: ["ok", "✓ filed"], dismissed: ["none", "– dismissed"],
 };
-const M = { items: null, ai: null, homebox: false };
+const TARGET_NAME = { homebox: "Homebox", donetick: "Donetick" };
+// `target` is where an approval goes ([maintenance] target); `ready` says it has an address.
+const M = { items: null, ai: null, homebox: false, target: "homebox", ready: false };
 
 function maintJobRow(r) {
   const state = r.error ? st("warn", "▲ model failed") : r.found ? st("ok", `✓ ${r.added} new`) : st("none", "– none");
@@ -1118,14 +1120,19 @@ async function homeboxItems() {
 }
 
 function suggestionCard(s) {
-  const [k, w] = MAINT_STATE[s.status] || ["none", s.status];
+  let [k, w] = MAINT_STATE[s.status] || ["none", s.status];
+  if (s.status === "filed") w = `✓ in ${TARGET_NAME[s.filed_in] || s.filed_in}`;
+  const where = TARGET_NAME[M.target] || M.target;
   const card = el("div", { class: "panel maint" });
   const quote = el("blockquote", { class: "quote" }, `“${s.quote}”`,
     el("div", { class: "muted" }, "— ", s.title || `${s.brand} ${s.model}`, ", ",
       el("a", { href: `#read/${s.sha256}/${s.page}` }, `page ${s.page} →`)));
   const meta = el("p", { class: "muted fine" }, sourceText(s.source));
   if (s.status !== "new") {
-    const what = s.status === "filed" ? [` for ${s.scheduled}`, s.item_name ? ` on ${s.item_name}` : ""] : [];
+    const what = s.status === "filed"
+      ? [s.filed_in === "donetick" ? `, first due ${s.scheduled}` : ` for ${s.scheduled}`,
+        s.item_name ? ` ${s.filed_in === "donetick" ? "for" : "on"} ${s.item_name}` : ""]
+      : [];
     card.append(el("p", { class: "maint-head" }, st(k, w), " ", el("b", {}, s.task), `, ${s.every}`, ...what), quote, meta);
     if (s.status === "dismissed") {
       const undo = el("button", { type: "button", class: "small" }, "Undo");
@@ -1139,7 +1146,12 @@ function suggestionCard(s) {
   const date = el("input", { name: "scheduled", type: "date", value: s.first_date, required: true });
   form.append(el("label", { class: "grow" }, "Task", task), el("label", {}, "First date", date));
   let itemSel = null;
-  if (s.item_id) {
+  let appliance = null;
+  if (M.target === "donetick") {
+    // The chore is named "<appliance>: <task>"; no Homebox item is needed.
+    appliance = el("input", { name: "appliance", value: s.item_name || `${s.brand} ${s.model}`, maxlength: 120 });
+    form.append(el("label", {}, "Appliance", appliance));
+  } else if (s.item_id) {
     form.append(el("p", { class: "item-name" }, "Homebox item: ", el("b", {}, s.item_name)));
   } else if (M.homebox) {
     itemSel = el("select", { name: "item_id", required: true }, el("option", { value: "" }, "choose the item…"));
@@ -1148,7 +1160,7 @@ function suggestionCard(s) {
     }).catch((e) => card.append(errorBox(e)));
     form.append(el("label", {}, `Homebox item (${s.brand} ${s.model})`, itemSel));
   }
-  const add = el("button", { type: "submit", class: "primary", disabled: !M.homebox }, "✓ Add to Homebox");
+  const add = el("button", { type: "submit", class: "primary", disabled: !M.ready }, `✓ Add to ${where}`);
   const dismiss = el("button", { type: "button" }, "✗ Dismiss");
   dismiss.addEventListener("click", () => decide(s, "dismiss", dismiss));
   form.append(add, dismiss);
@@ -1158,6 +1170,7 @@ function suggestionCard(s) {
     try {
       const done = await api(`/api/maintenance/${s.id}/approve`, {
         task: task.value, scheduled: date.value, item_id: itemSel ? itemSel.value : "",
+        appliance: appliance ? appliance.value : "",
       });
       card.replaceWith(suggestionCard(done));
       loadMaintenance(false);
@@ -1169,7 +1182,7 @@ function suggestionCard(s) {
   // DOM append prints null as text, so the optional parts are left out first.
   card.append(...[el("p", { class: "maint-head" }, st(k, w), " ", el("b", {}, s.task), `, ${s.every}`), quote, meta,
     s.error ? el("p", {}, st("bad", "✗ last try:"), ` ${s.error}`) : null, form,
-    M.homebox ? null : el("p", { class: "muted" }, "▲ Homebox isn't set up: set its address on ",
+    M.ready ? null : el("p", { class: "muted" }, `▲ ${where} isn't set up: set its address on `,
       el("a", { href: "#settings" }, "Settings"), ".")].filter(Boolean));
   return card;
 }
@@ -1193,10 +1206,12 @@ async function loadMaintenance(redraw = true) {
     const res = await api(`/api/maintenance?status=${encodeURIComponent(status)}`);
     M.ai = res.ai;
     M.homebox = res.homebox;
+    M.target = res.target || "homebox";
+    M.ready = res.ready;
     $("#maint-ai").hidden = !res.ai;
     $("#maint-ai-name").textContent = res.ai || "";
     const n = res.counts;
-    $("#maint-counts").textContent = `● ${n.new} waiting · ✓ ${n.filed} in Homebox · – ${n.dismissed} dismissed`;
+    $("#maint-counts").textContent = `● ${n.new} waiting · ✓ ${n.filed} filed · – ${n.dismissed} dismissed`;
     if (!redraw) return;
     if (!res.suggestions.length) {
       out.replaceChildren(el("p", { class: "muted" }, status === "new"
@@ -1263,6 +1278,7 @@ const SECTIONS = [
   ["Homebox", ["homebox.url", "homebox.attach_links"]],
   ["Home Assistant", ["home_assistant.url"]],
   ["Paperless-ngx", ["paperless.url", "paperless.auto", "paperless.document_type"]],
+  ["Maintenance", ["maintenance.target", "donetick.url", "donetick.label"]],
   ["AI model (rating plates, Ask)", ["ai.provider", "ai.model", "ai.url"]],
 ];
 
@@ -1301,7 +1317,7 @@ function settingRow(f, keys) {
     row.append(el("p", { class: "hint" }, held ? st("bad", `✗ API key not sent: ${held}`)
       : keys.homebox ? st("ok", "✓ API key found") : st("warn", "▲ no API key")));
   }
-  for (const t of ["home_assistant", "paperless"]) {
+  for (const t of ["home_assistant", "paperless", "donetick"]) {
     if (f.key !== `${t}.url` || !f.value) continue;
     const held = (keys.held_back || {})[t];
     row.append(el("p", { class: "hint" }, held ? st("bad", `✗ token not sent: ${held}`)

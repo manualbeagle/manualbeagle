@@ -70,6 +70,8 @@ from ..newitem import preview as preview_item
 from ..normalize import normalise
 from ..pipeline import find
 from ..search import make_engine
+from ..sinks.donetick import DonetickError
+from ..sinks.donetick import from_config as donetick
 from ..sinks.homebox import Homebox, HomeboxError
 from ..sync import Plan, attach, homebox, plan_item
 from ..sync import summary as sync_summary
@@ -735,9 +737,10 @@ def _settings_out(st: State) -> dict:
             "homebox": bool(cfg.homebox.url) and bool(cfg.homebox.token()),
             "home_assistant": bool(cfg.home_assistant.url) and bool(cfg.home_assistant.token()),
             "paperless": bool(cfg.paperless.url) and bool(cfg.paperless.token()),
+            "donetick": bool(cfg.donetick.url) and bool(cfg.donetick.token()),
             "held_back": {
                 t: getattr(cfg, t).key_held_back(getattr(cfg, t).url)
-                for t in ("homebox", "home_assistant", "paperless")
+                for t in ("homebox", "home_assistant", "paperless", "donetick")
             },
             "anthropic": bool(os.environ.get(cfg.ai.api_key_env or "ANTHROPIC_API_KEY")),
         },
@@ -1138,7 +1141,7 @@ async def api_attach(request: Request) -> Response:
     return JSONResponse(job.public(), 202)
 
 
-# Maintenance suggestions: read from the manuals, approved here one at a time, filed in Homebox.
+# Maintenance suggestions: read from the manuals, approved here one at a time, filed in Homebox or Donetick.
 
 MAINTENANCE_TURN = threading.Lock()  # one approval at a time, so a double click can't file an entry twice
 
@@ -1151,7 +1154,11 @@ def _suggestion_id(request: Request) -> int:
 
 
 async def api_maintenance(request: Request) -> Response:
-    """GET /api/maintenance?status=new|filed|dismissed|all: the suggestions, the counts, and what's set up."""
+    """GET /api/maintenance?status=new|filed|dismissed|all: the suggestions, the counts, and what's set up.
+
+    `target` is where an approval goes (`[maintenance] target`: homebox or donetick), and `ready` whether that
+    target has an address.
+    """
     st = _state(request)
     status = request.query_params.get("status", "new")
     if status not in (*mt.STATUSES, "all"):
@@ -1165,6 +1172,8 @@ async def api_maintenance(request: Request) -> Response:
                 "counts": store.counts(),
                 "ai": mt.model_label(st.cfg.ai) or None,
                 "homebox": bool(st.cfg.homebox.url),
+                "target": st.cfg.maintenance.target,
+                "ready": bool(_target_url(st.cfg)),
             }
 
     return JSONResponse(await run_in_threadpool(work))
@@ -1244,19 +1253,39 @@ def _date(value: Any) -> dt.date | None:
     return d
 
 
-async def api_maintenance_approve(request: Request) -> Response:
-    """POST /api/maintenance/{id}/approve {task?, scheduled?, item_id?}: file one suggestion in Homebox.
+def _target_url(cfg: Config) -> str:
+    """The address of the place approved maintenance goes (`[maintenance] target`), or "" when it isn't set."""
+    return cfg.donetick.url if cfg.maintenance.target == "donetick" else cfg.homebox.url
 
-    The person's click: adds a maintenance entry to the Homebox item, scheduled for `scheduled` (default: one
-    interval from today), named `task` (default: the suggestion's). `item_id` chooses the item when the
-    suggestion has none (or another one). Homebox refusing leaves the suggestion waiting, with the reason.
+
+def _reader_link(st: State, s: mt.Suggestion) -> str:
+    """The web UI's address of the page a suggestion was read on, when the UI has one public address."""
+    if len(st.origins) != 1:
+        return ""
+    return f"{next(iter(st.origins))}/#read/{s.sha256}/{s.page}"
+
+
+async def api_maintenance_approve(request: Request) -> Response:
+    """POST /api/maintenance/{id}/approve {task?, scheduled?, item_id?, appliance?}: file one suggestion.
+
+    The person's click. With `[maintenance] target = "homebox"` it adds a maintenance entry to the Homebox item,
+    scheduled for `scheduled` (default: one interval from today), named `task` (default: the suggestion's);
+    `item_id` chooses the item when the suggestion has none (or another one). With `"donetick"` it makes a
+    Donetick chore named "`appliance`: `task`" (the appliance defaults to the item's name, else the brand and
+    model) that repeats on the suggestion's interval, first due on `scheduled`; no Homebox item is needed. A
+    refusal leaves the suggestion waiting, with the reason.
     """
     st = _state(request)
     sid = _suggestion_id(request)
     body = await _json(request)
     task = _text(body, "task", limit=255)
     chosen = _entity_id(body, "item_id")
+    appliance = _text(body, "appliance", limit=120)
     scheduled = _date(body.get("scheduled"))
+    if st.cfg.maintenance.target == "donetick":
+        return JSONResponse(
+            await run_in_threadpool(_approve_in_donetick, st, sid, task, chosen, appliance, scheduled)
+        )
 
     def work() -> dict:
         with MAINTENANCE_TURN, st.library() as lib:
@@ -1291,6 +1320,42 @@ async def api_maintenance_approve(request: Request) -> Response:
             return done.public()
 
     return JSONResponse(await run_in_threadpool(work))
+
+
+def _approve_in_donetick(
+    st: State, sid: int, task: str, chosen: str, appliance: str, scheduled: dt.date | None
+) -> dict:
+    """File one waiting suggestion as a recurring Donetick chore (`api_maintenance_approve`)."""
+    with MAINTENANCE_TURN, st.library() as lib:
+        store = mt.Store(lib)
+        s = store.get(sid)
+        if s is None:
+            raise ApiError(404, "no such suggestion")
+        if s.status != "new":
+            raise ApiError(409, f"this suggestion was {s.status} already")
+        item_id = chosen or s.item_id
+        name = appliance or (s.item_name if item_id == s.item_id else "") or f"{s.brand} {s.model}".strip()
+        try:
+            client = donetick(st.cfg)
+        except DonetickError as e:
+            raise ApiError(400, str(e)) from None
+        when = scheduled or s.first_date()
+        try:
+            chore = mt.file_in_donetick(
+                client, s, name, task or s.task, when, st.cfg.donetick, _reader_link(st, s)
+            )
+        except DonetickError as e:
+            store.failed(sid, str(e))
+            raise ApiError(502, f"Donetick refused: {e}") from None
+        except (httpx.HTTPError, OSError) as e:
+            store.failed(sid, str(e))
+            raise ApiError(502, f"Donetick didn't answer: {e}") from None
+        finally:
+            client.close()
+        store.filed(sid, task or s.task, item_id, name, when.isoformat(), chore, target="donetick")
+        done = store.get(sid)
+        assert done is not None
+        return done.public()
 
 
 async def api_maintenance_decide(request: Request) -> Response:

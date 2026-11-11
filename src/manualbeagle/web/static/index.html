@@ -153,13 +153,15 @@
     <div id="ha-find-out" aria-live="polite"></div>
   </section>
 
-  <!-- Maintenance: tasks with an interval read from the manuals; each is approved (filed in Homebox) or dismissed. -->
+  <!-- Maintenance: tasks with an interval read from the manuals; each is approved (filed in Homebox or Donetick)
+       or dismissed. -->
   <section id="view-maintenance" class="view" hidden>
     <h1>Maintenance</h1>
     <p class="hint">Tasks with an interval read from the manuals in the library, such as “clean the filter every
-      2 weeks”, each with the page it came from. Nothing goes to Homebox until you add it: an added task becomes a
-      maintenance entry on its item for the date you choose, and Homebox reminds you that day. A dismissed task
-      isn't suggested again.</p>
+      2 weeks”, each with the page it came from. Nothing is filed until you add it: an added task becomes a
+      maintenance entry on its Homebox item for the date you choose, or, when Settings sends approved maintenance
+      to Donetick, a chore that repeats on the task's interval from that date. A dismissed task isn't suggested
+      again.</p>
     <form id="maint-form" class="row-form">
       <label class="check" id="maint-ai" hidden><input name="ai" type="checkbox"> Also ask <span class="mono" id="maint-ai-name"></span> (slower)</label>
       <button type="submit" class="primary">Read the manuals</button>
@@ -169,7 +171,7 @@
       <label>Show
         <select id="maint-status">
           <option value="new">● waiting for you</option>
-          <option value="filed">✓ added to Homebox</option>
+          <option value="filed">✓ added</option>
           <option value="dismissed">– dismissed</option>
           <option value="all">all</option>
         </select>
