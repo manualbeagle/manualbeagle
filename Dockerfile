@@ -7,7 +7,7 @@
 # linux/amd64 and linux/arm64, so `docker buildx build --platform linux/amd64,linux/arm64 .` builds both (the
 # release workflow does).
 
-FROM python:3.12-slim
+FROM python:3.15-slim
 
 ARG VERSION=dev
 LABEL org.opencontainers.image.title="Manual Beagle" \
