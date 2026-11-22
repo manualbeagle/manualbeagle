@@ -7,6 +7,8 @@ anything may change between minor versions.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-22
+
 ### Added
 
 - **Approved maintenance can become a recurring Donetick chore:** with `[maintenance] target = "donetick"` and a
@@ -178,5 +180,6 @@ The first release, on PyPI (`pip install manualbeagle`) and as the image `ghcr.i
   tab, and the web UI's footer has a "☕ Support it" link. The design notes (`docs/design.html`) left the
   repository.
 
-[Unreleased]: https://github.com/manualbeagle/manualbeagle/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/manualbeagle/manualbeagle/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/manualbeagle/manualbeagle/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/manualbeagle/manualbeagle/releases/tag/v0.1.0
