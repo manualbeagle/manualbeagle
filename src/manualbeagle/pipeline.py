@@ -9,14 +9,14 @@ from .http import Blocked, FetchError, PoliteClient
 from .models import AdapterReport, Candidate, FindResult, Query
 from .normalize import normalise
 from .search import SearchEngine
-from .verify import is_mirror, model_in, rank
+from .verify import host_matches, is_mirror, model_in, rank
 
 
 def search_queries(q: Query, adapters: list[Adapter]) -> list[str]:
     """The web-search queries for a lookup, most useful first.
 
     Search engines suspend a SearXNG that asks too often, so search_candidates stops as soon as one query has
-    found a PDF that names the model.
+    found a PDF that names the model (on the maker's own site, when an adapter says which that is).
     """
     brand = q.canonical_brand or q.brand
     model = q.variants[0] if q.variants else q.model
@@ -36,6 +36,7 @@ def search_candidates(
     """Run up to `max_queries` web searches and turn their hits into candidates (non-PDFs are link-only)."""
     out: list[Candidate] = []
     variants = q.variants or [q.model]
+    domains = [d for a in adapters for d in a.spec.domains]
     for text in search_queries(q, adapters)[:max_queries]:
         for h in engine.search(text, http):
             path = urlparse(h.url).path.lower()
@@ -51,7 +52,10 @@ def search_candidates(
                 )
             )
         if any(
-            not c.link_only and max(model_in(c.title, variants), model_in(c.url, variants)) >= 2 for c in out
+            not c.link_only
+            and (not domains or host_matches(c.host, domains))
+            and max(model_in(c.title, variants), model_in(c.url, variants)) >= 2
+            for c in out
         ):
             break
     return out

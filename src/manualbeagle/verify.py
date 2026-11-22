@@ -32,6 +32,21 @@ MIRRORS = {
     "manuals.plus",
     "manualshelf.com",
     "manualsnet.com",
+    "manualslib.es",
+    "radiomanual.eu",
+}
+
+# Posts and videos: never a manual, and a search hit for one often repeats the model in its title.
+SOCIAL = {
+    "facebook.com",
+    "instagram.com",
+    "tiktok.com",
+    "reddit.com",
+    "youtube.com",
+    "youtu.be",
+    "pinterest.com",
+    "x.com",
+    "twitter.com",
 }
 
 RETAILERS = {
@@ -225,11 +240,13 @@ def model_in(text: str, variants: list[str]) -> int:
     weak = False
     for i, v in enumerate(variants):
         cv = compact(v)
-        if len(cv) < 4 or cv not in t:
+        # Three characters count only as letters and digits standing on their own: FH-2, E21.
+        short = len(cv) == 3 and re.search(r"[A-Z]", cv) and re.search(r"[0-9]", cv)
+        if (len(cv) < 4 and not short) or cv not in t:
             continue
         if _model_pattern(v).search(up):
             return 3 if i == 0 else 2
-        weak = True
+        weak = weak or not short
     has_wild = "*" in text or "#" in text or "?" in text
     if has_wild and any(wildcard_match(text, v) for v in variants):
         return 2
@@ -270,6 +287,10 @@ def score(c: Candidate, q: Query, maker_domains: list[str]) -> Candidate:
         s += 3
         c.link_only = True
         reasons.append("manual mirror, link only +3")
+    elif host_matches(host, SOCIAL):
+        s -= 40
+        c.link_only = True
+        reasons.append("a social post or video, link only -40")
 
     if is_staging(host):
         s -= 50
@@ -317,7 +338,7 @@ def score(c: Candidate, q: Query, maker_domains: list[str]) -> Candidate:
             reasons.append(f"{kind.value} +{w}")
 
     path = urlparse(c.url).path.lower()
-    if path.endswith(".pdf"):
+    if path.endswith(".pdf") and not is_mirror(c.url):  # a mirror's PDF is never fetched
         s += 5
         reasons.append("a PDF +5")
     elif not c.link_only and not c.source.startswith("adapter:"):
@@ -355,6 +376,35 @@ def rank(cands: list[Candidate], q: Query, maker_domains: list[str]) -> list[Can
     return sorted(merged.values(), key=lambda c: (-c.score, c.title))
 
 
+# Common short words, chosen so that few are words in another of these languages.
+_ENGLISH_WORDS = frozenset(["the", "and", "with", "your", "this", "when", "from", "are", "should", "before"])
+_OTHER_WORDS = {
+    "es": frozenset(["el", "los", "las", "del", "para", "con", "una", "que", "por", "su"]),
+    "fr": frozenset(["le", "les", "des", "du", "pour", "avec", "une", "est", "vous", "dans"]),
+    "de": frozenset(["der", "die", "das", "und", "nicht", "mit", "für", "den", "sie", "ist"]),
+    "it": frozenset(["il", "di", "per", "che", "della", "non", "gli", "una", "sono", "nel"]),
+    "pt": frozenset(["os", "das", "dos", "para", "com", "uma", "não", "que", "seu", "ou"]),
+    "nl": frozenset(["het", "een", "van", "niet", "met", "voor", "zijn", "deze", "wordt", "naar"]),
+}
+
+
+def other_language(text: str) -> str | None:
+    """The language of text that has no English part ("es", "non-Latin script"...), else None.
+
+    A multilingual manual with an English section is None, and so is text with too few words to tell.
+    """
+    words = re.findall(r"[^\W\d_]+", text.lower())
+    if len(words) < 100:
+        return None
+    if sum(w in _ENGLISH_WORDS for w in words) >= max(20, len(words) // 200):
+        return None
+    if sum(ord(w[0]) >= 0x370 for w in words) > len(words) * 0.3:
+        return "non-Latin script"
+    counts = {lang: sum(w in known for w in words) for lang, known in _OTHER_WORDS.items()}
+    lang = max(counts, key=lambda k: counts[k])
+    return lang if counts[lang] >= len(words) * 0.05 else None
+
+
 def check_pdf_text(pages: list[str], q: Query) -> tuple[float, list[str]]:
     """Score a fetched PDF's text. The model in the text is the strongest signal."""
     reasons = []
@@ -383,4 +433,7 @@ def check_pdf_text(pages: list[str], q: Query) -> tuple[float, list[str]]:
         reasons.append(f"first pages read as {kind.value}")
     if len(pages) >= 4:
         s += 3
+    if q.language == "en" and (other := other_language(full)):
+        s -= 60  # more than naming the model earns: the wrong edition of the right product
+        reasons.append(f"PDF text has no English ({other}) -60")
     return s, reasons

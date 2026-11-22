@@ -169,7 +169,8 @@ def trusted_by_adapter(c: Candidate, reasons: list[str], reg: Registry) -> str:
     longer SKU, or the base tool of a kit), or any PDF with text from an adapter whose maker publishes family
     manuals. A web-search result never qualifies.
     """
-    if not c.source.startswith("adapter:") or any(r.startswith("no text extracted") for r in reasons):
+    unusable = ("no text extracted", "PDF text has no English")
+    if not c.source.startswith("adapter:") or any(r.startswith(unusable) for r in reasons):
         return ""
     adapter = reg.adapters.get(c.source.split(":", 1)[1])
     if adapter is None:
