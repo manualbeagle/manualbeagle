@@ -7,7 +7,7 @@
    "headers": {
     "content-type": "text/html; charset=UTF-8"
    },
-   "text": "<span>Specification Sheet</span>\n                                                        <a href=\"https://www.alorair.com/pdf_files/product_guides/97/91jL+E19PDL.pdf\"\n<span>User Guide</span>\n                                                        <a href=\"https://www.alorair.com/pdf_files/product_guides/97/AlorAir-Sentinel-HD55S-User-Manual-20230810.pdf\""
+   "text": "<div class=\"doc-title\">Specification Sheet</div>\r\n                <a class=\"doc-btn\" href=\"https://files.alorair.com/files/2026/06/91jLE19PDL.pdf\"\n<div class=\"doc-title\">User Guide</div>\r\n                <a class=\"doc-btn\" href=\"https://files.alorair.com/files/2026/06/AlorAir-Sentinel-HD55S-User-Manual-20230810.pdf\""
   }
  ]
 }
