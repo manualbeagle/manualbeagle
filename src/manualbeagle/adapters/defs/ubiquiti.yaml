@@ -1,0 +1,15 @@
+# Ubiquiti. Link-only for now.
+# Not yet written as a searching adapter; web search of the maker's site does the finding.
+# Known gaps: the quick guides are web pages at dl.ui.com/qig/<model>/; a model without one lands on techspecs.ui.com.
+# Last verified: 2026-11-22.
+brand: Ubiquiti
+aliases: [UniFi, Ubiquiti Networks]
+domains: [ui.com, ubnt.com]
+status: link
+categories: [network gear, cameras]
+manual_page: https://dl.ui.com/qig/{model_slug}/
+notes: >-
+  Not yet written as a searching adapter; web search of the maker's site does the finding.
+tests:
+  - model: U6-LR
+    skip: link-only adapter; web search does the finding (see notes)

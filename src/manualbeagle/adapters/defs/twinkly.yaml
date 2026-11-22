@@ -1,0 +1,13 @@
+# Twinkly. Link-only for now.
+# Not yet written as a searching adapter; web search of the maker's site does the finding.
+# Last verified: 2026-11-22.
+brand: Twinkly
+aliases: []
+domains: [twinkly.com]
+status: link
+categories: [lighting]
+notes: >-
+  Not yet written as a searching adapter; web search of the maker's site does the finding.
+tests:
+  - model: Strings
+    skip: link-only adapter; web search does the finding (see notes)

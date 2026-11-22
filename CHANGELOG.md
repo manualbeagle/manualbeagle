@@ -19,6 +19,19 @@ anything may change between minor versions.
   `filed_in` and `donetick_chore` (added to an existing library by itself). See
   [docs/integrations/donetick.md](docs/integrations/donetick.md).
 - **`tzdata` on Windows,** for the chores' time zones (Windows has no time zone database of its own).
+- **Adapters for Netgate and Synology,** and link-only adapters that tell the search and the ranking which sites
+  are the maker's for Ubiquiti, GL.iNet, Intel, HP, Starlink, Kidde, Yaesu, Radioddity, Powerwerx, Streamlight,
+  Southwire, Twinkly, Seeed and Razer.
+
+### Fixed
+
+- **AlorAir's downloads,** which moved to files.alorair.com.
+- **A PDF with no English** (when English was asked for) fails the text check, even from an adapter whose family
+  manuals are trusted. A multilingual manual with an English section still passes.
+- **Social posts and videos** are link-only and rank last, and a manual mirror's PDF no longer outranks a direct
+  one. Two more mirrors are recognised.
+- **Three-character models** such as FH-2 are recognised where they stand on their own.
+- **The web search goes on to the maker's site** when its first query found only someone else's PDF.
 
 ## [0.1.0] - 2026-11-05
 

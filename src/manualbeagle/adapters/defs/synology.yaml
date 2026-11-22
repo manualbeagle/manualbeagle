@@ -1,0 +1,22 @@
+# Synology.
+# Searched by adapters/py/synology.py.
+# Site: the download centre's API (api/support/findDownloadInfo) lists a product's documents by language.
+# Known gaps: English hardware documents only; DSM's own guides are left out.
+# Last verified: 2026-11-22.
+brand: Synology
+domains: [synology.com, synologydownload.com]
+status: works
+categories: [NAS]
+manual_page: https://www.synology.com/en-us/support/download/{model}
+python: synology:Synology
+kinds:
+  "_HIG_": install_guide
+  "_QIG_": quick_start
+  "/DataSheet/": spec_sheet
+  "/ProductSpec/": spec_sheet
+notes: >-
+  The download centre's API; the English hardware guides and data sheets.
+tests:
+  - model: DS918+
+    note: 4-bay NAS
+    expect: {kind: quick_start, url_contains: Syno_QIG_DS918_Plus_enu.pdf}
