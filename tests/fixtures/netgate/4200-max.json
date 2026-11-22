@@ -1,0 +1,22 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://docs.netgate.com/pfsense/en/latest/solutions/netgate-4200-max/index.html",
+   "status": 404,
+   "url": "https://docs.netgate.com/pfsense/en/latest/solutions/netgate-4200-max/index.html",
+   "headers": {
+    "content-type": "text/html"
+   },
+   "text": "<!DOCTYPE html>\n<html class=\"writer-html5\" lang=\"en\" data-content_root=\"./\">\n<head>\n  <!-- Cookie Banner -->\n  <script type=\"text/javascript\" src=\"https://embeds.iubenda.com/widgets/c2c5b870-f765-4b21-9b08-48ffdcfd42f4.js\"></script>\n  <!-- Google Tag Manager -->\n  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':\n  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],\n  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=\n  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);\n  })(window,document,'script','dataLayer','GTM-N2P5PS2');</script>\n  <!-- End Google Tag Manager -->\n  <meta charset=\"utf-8\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>404 - Page Not Found | Netgate Documentation</title>\n      <link rel=\"stylesheet\" type=\"text/css\" href=\"/_static/pygments.css?v=03e43079\" />\n      <link rel=\"stylesheet\" type=\"text/css\" href=\"/_static/css/theme.css?v=19f00094\" />\n      <link rel=\"stylesheet\" type=\"text/css\" href=\"/_static/graphviz.css?v=fd3f3429\" />\n      <link rel=\"stylesheet\" type=\"text/css\" href=\"/_static/copybutton.css?v=76b2166b\" />\n      <link rel=\"stylesheet\" type=\"text/css\" href=\"/_static/tabs.css?v=a5c4661c\" />\n      <link rel=\"stylesheet\" type=\"text/css\" href=\"/_static/custom.css?v=cd6555f7\" />\n\n  \n    <link rel=\"shortcut icon\" href=\"/_static/favicon.ico\"/>\n    <link rel=\"canonical\" href=\"https://docs.netgate.com/404.html\" />\n  <!--[if lt IE 9]>\n    <script src=\"/_static/js/html5shiv.min.js\"></script>\n  <![endif]-->\n  \n        <script src=\"/_static/jquery.js?v=5d32c60e\"></script>\n        <script src=\"/_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c\"></script>\n        <script src=\"/_static/documentation_options.js?v=91d07486\"></script>\n        <script src=\"/_static/doctools.js?v=9a2dae69\"></script>\n        <script src=\"/_static/sphinx_highlight.js?"
+  },
+  {
+   "key": "GET https://docs.netgate.com/pfsense/en/latest/solutions/netgate-4200/index.html",
+   "status": 200,
+   "url": "https://docs.netgate.com/pfsense/en/latest/solutions/netgate-4200/index.html",
+   "headers": {
+    "content-type": "text/html"
+   },
+   "text": "href=\"/manuals/pfsense/en/latest/netgate-4200-security-gateway-manual.pdf\"\nhref=\"/manuals/pfsense/en/latest/netgate-4200-security-gateway-manual.pdf\""
+  }
+ ]
+}

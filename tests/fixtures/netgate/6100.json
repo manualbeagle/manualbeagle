@@ -1,0 +1,13 @@
+{
+ "interactions": [
+  {
+   "key": "GET https://docs.netgate.com/pfsense/en/latest/solutions/netgate-6100/index.html",
+   "status": 200,
+   "url": "https://docs.netgate.com/pfsense/en/latest/solutions/netgate-6100/index.html",
+   "headers": {
+    "content-type": "text/html"
+   },
+   "text": "href=\"/manuals/pfsense/en/latest/netgate-6100-security-gateway-manual.pdf\"\nhref=\"/manuals/pfsense/en/latest/netgate-6100-security-gateway-manual.pdf\""
+  }
+ ]
+}

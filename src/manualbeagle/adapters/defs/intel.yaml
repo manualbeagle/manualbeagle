@@ -1,0 +1,13 @@
+# Intel. Link-only for now.
+# Not yet written as a searching adapter; web search of the maker's site does the finding.
+# Last verified: 2026-11-22.
+brand: Intel
+aliases: [Intel NUC]
+domains: [intel.com]
+status: link
+categories: [computers]
+notes: >-
+  Not yet written as a searching adapter; web search of the maker's site does the finding.
+tests:
+  - model: NUC8i5BEH
+    skip: link-only adapter; web search does the finding (see notes)

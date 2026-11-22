@@ -1,0 +1,26 @@
+# Netgate (pfSense appliances).
+# Site: docs.netgate.com; each appliance's documentation page links its whole manual as a PDF.
+# Known gaps: an appliance whose page isn't named netgate-<model> isn't found.
+# Last verified: 2026-11-22.
+brand: Netgate
+domains: [netgate.com, docs.netgate.com]
+status: works
+categories: [firewalls, routers]
+model:
+  strip_suffix: ['[ -]?(BASE|MAX)$']
+manual_page: https://docs.netgate.com/pfsense/en/latest/solutions/netgate-{model_slug}/index.html
+search:
+  - url: https://docs.netgate.com/pfsense/en/latest/solutions/netgate-{model_slug}/index.html
+    format: regex
+    results: 'href="(?P<url>/manuals/pfsense/en/latest/(?P<name>netgate-[a-z0-9-]+-manual)\.pdf)"'
+    fields: {url: url, title: "=Netgate {name}", kind: "=owners_manual"}
+    base_url: https://docs.netgate.com
+notes: >-
+  The appliance's documentation page; its manual as a PDF.
+tests:
+  - model: "6100"
+    note: firewall appliance
+    expect: {kind: owners_manual, url_contains: netgate-6100-security-gateway-manual.pdf}
+  - model: 4200 MAX
+    note: the storage option is stripped
+    expect: {kind: owners_manual, url_contains: netgate-4200}

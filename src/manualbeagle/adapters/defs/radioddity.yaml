@@ -1,0 +1,13 @@
+# Radioddity. Link-only for now.
+# Not yet written as a searching adapter; web search of the maker's site does the finding.
+# Last verified: 2026-11-22.
+brand: Radioddity
+aliases: []
+domains: [radioddity.com, radioddity.s3.amazonaws.com]
+status: link
+categories: [radios]
+notes: >-
+  Not yet written as a searching adapter; web search of the maker's site does the finding.
+tests:
+  - model: GA-510
+    skip: link-only adapter; web search does the finding (see notes)

@@ -277,3 +277,85 @@ def test_model_re_keeps_the_model_as_a_whole_name():
     assert re.search(pat, "RoboVac L35-Hybrid manual", re.I)
     assert not re.search(pat, "RoboVac L35 Hybrid+_EN_Manual", re.I)
     assert not re.search(pat, "RoboVac XL35 Hybrid_EN_Manual", re.I)
+
+
+def test_three_character_model_only_on_its_own():
+    from manualbeagle.verify import model_in
+
+    assert model_in("Yaesu FH-2 remote control keypad", ["FH-2"]) == 3
+    assert model_in("FH-20 manual", ["FH-2"]) == 0
+    assert model_in("The ABC of manuals", ["ABC"]) == 0
+
+
+def test_social_posts_and_mirrors_rank_below_a_direct_pdf():
+    from manualbeagle.models import Candidate, Query
+    from manualbeagle.verify import rank
+
+    title = "Example EX-4410 manual"
+    urls = [
+        "https://www.facebook.com/example/posts/EX-4410",
+        "https://manuals.plus/asin/EX-4410.pdf",
+        "https://dealer.example/EX-4410.pdf",
+    ]
+    got = rank([Candidate(url=u, title=title) for u in urls], Query(brand="Example", model="EX-4410"), [])
+    assert [c.url for c in got] == urls[::-1]
+    assert got[1].link_only and got[2].link_only
+
+
+def test_pdf_without_english_fails_the_text_check():
+    from manualbeagle.models import Query
+    from manualbeagle.verify import check_pdf_text, other_language
+
+    q = Query(brand="Example", model="EX-4410")
+    spanish = "Lea las instrucciones del aparato para el uso con una toma que tenga tierra. " * 20
+    greek = "Διαβάστε τις οδηγίες πριν από τη χρήση της συσκευής. " * 20
+    english = "Read the instructions before use and keep them with your appliance. " * 10
+    assert other_language(spanish) == "es"
+    assert other_language(greek) == "non-Latin script"
+    assert other_language(english) is None
+    assert other_language(spanish * 5 + english) is None  # multilingual, with an English section
+    assert other_language("EX-4410 120 V 60 Hz") is None  # too few words to tell
+
+    score, reasons = check_pdf_text(["EX-4410 " + spanish] * 5, q)
+    assert score < 0 and any("no English" in r for r in reasons)
+    assert check_pdf_text(["EX-4410 " + english] * 5, q)[0] > 0
+    spanish_query = Query(brand="Example", model="EX-4410", language="es")
+    assert check_pdf_text(["EX-4410 " + spanish] * 5, spanish_query)[0] > 0
+
+
+def test_adapter_trust_does_not_cover_a_pdf_without_english():
+    from types import SimpleNamespace
+
+    from manualbeagle.models import Candidate
+    from manualbeagle.sync import trusted_by_adapter
+
+    adapter = SimpleNamespace(spec=SimpleNamespace(family_manuals=True))
+    reg = SimpleNamespace(adapters={"example": adapter})
+    c = Candidate(url="https://example.com/m.pdf", source="adapter:example")
+    assert trusted_by_adapter(c, ["PDF text doesn't name the model -10"], reg)
+    assert not trusted_by_adapter(c, ["PDF text has no English (es) -60"], reg)
+
+
+def test_search_goes_on_to_the_makers_site_past_a_dealers_pdf():
+    from types import SimpleNamespace
+
+    from manualbeagle.models import Query
+    from manualbeagle.pipeline import search_candidates
+
+    asked = []
+
+    class Engine:
+        name = "fake"
+
+        def search(self, text, http):
+            asked.append(text)
+            host = "example.com" if text.startswith("site:") else "dealer.example"
+            return [SimpleNamespace(url=f"https://{host}/EX-4410.pdf", title="EX-4410 manual", snippet="")]
+
+    maker = SimpleNamespace(spec=SimpleNamespace(domains=["example.com"]))
+    q = Query(brand="Example", model="EX-4410")
+    got = search_candidates(q, Engine(), None, [maker])
+    assert len(asked) == 2 and got[-1].host == "example.com"
+    asked.clear()
+    search_candidates(q, Engine(), None, [])
+    assert len(asked) == 1

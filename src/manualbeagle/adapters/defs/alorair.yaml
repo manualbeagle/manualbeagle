@@ -1,8 +1,8 @@
 # AlorAir (crawlspace and basement dehumidifiers, air scrubbers).
 # Site: www.alorair.com/product-details/alorair-<model as a slug> is the product page; its downloads list each
-# document as a label ("User Guide", "Specification Sheet") followed by a link to /pdf_files/product_guides/.
+# document as a doc-title ("User Guide", "Specification Sheet") followed by a link to files.alorair.com.
 # Known gaps: a model whose page slug isn't "alorair-" plus its name isn't found; the page is about 2 MB.
-# Last verified: 2026-11-03.
+# Last verified: 2026-11-22 (the downloads moved to files.alorair.com in November 2026).
 brand: AlorAir
 aliases: [AlorAir Solutions, Alorair]
 domains: [alorair.com]
@@ -10,11 +10,11 @@ status: works
 categories: [dehumidifiers, air scrubbers]
 manual_page: https://www.alorair.com/product-details/alorair-{model_slug}
 notes: >-
-  The product page's downloads (User Guide, Specification Sheet) under /pdf_files/product_guides/.
+  The product page's downloads (User Guide, Specification Sheet) on files.alorair.com.
 search:
   - url: https://www.alorair.com/product-details/alorair-{model_slug}
     format: regex
-    results: '<span>\s*(?P<label>[^<]{3,60}?)\s*</span>\s*<a href="(?P<url>https://www\.alorair\.com/pdf_files/product_guides/[^"]+?\.pdf)"'
+    results: '<div class="doc-title">\s*(?P<label>[^<]{3,60}?)\s*</div>\s*<a\b[^>]{0,200}?\bhref="(?P<url>https://files\.alorair\.com/[^"]+?\.pdf)"'
     fields: {url: url, title: '=AlorAir {label}', kind: label}
 kinds:
   User Guide: owners_manual
@@ -27,4 +27,4 @@ tests:
     expect: {kind: owners_manual, url_contains: Galaxy-60-User-Manual}
   - model: Sentinel HD55
     note: crawlspace dehumidifier
-    expect: {url_contains: pdf_files/product_guides}
+    expect: {url_contains: files.alorair.com}
